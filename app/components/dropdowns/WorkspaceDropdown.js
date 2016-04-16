@@ -13,9 +13,7 @@ class WorkspaceDropdown extends Component {
       <Dropdown right={true} {...other} className="block">
         <button className="btn header__content">
           <div className="grid grid--center">
-            <div className="grid__cell">
-              <h1 className="no-pad">Insomnia</h1>
-            </div>
+            <div className="grid__cell">Insomnia</div>
             <div className="no-wrap">
               {loading ? <i className="fa fa-refresh fa-spin txt-lg"></i> : ''}&nbsp;
               <i className="fa fa-caret-down txt-lg"></i>

@@ -1,8 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
-var webpackTargetElectronRenderer = require('webpack-target-electron-renderer');
 
-var config = {
+module.exports = {
   target: 'web',
   devtool: 'source-map',
   context: path.join(__dirname, '../app'),
@@ -53,21 +52,7 @@ var config = {
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.electron.js', '.chrome.js'],
+    extensions: ['', '.js', '.jsx'],
     packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main']
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      __DEV__: true,
-      'process.env': {
-        NODE_ENV: JSON.stringify('development')
-      }
-    }),
-    new webpack.ExternalsPlugin('commonjs', [
-      'request'
-    ])
-  ]
+  }
 };
-
-config.target = webpackTargetElectronRenderer(config);
-module.exports = config;

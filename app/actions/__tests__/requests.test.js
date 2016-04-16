@@ -5,6 +5,9 @@ jest.unmock('../../constants/actionTypes');
 jest.unmock('../../validators/request');
 jest.unmock('../../reducers/requests');
 jest.unmock('../../reducers/global');
+jest.unmock('jsonschema');
+jest.unmock('redux-thunk');
+jest.unmock('redux-mock-store');
 
 // Jest seems to barf when this isn't here
 jest.unmock('request');

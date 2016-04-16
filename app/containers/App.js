@@ -4,19 +4,17 @@ import {bindActionCreators} from 'redux'
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs'
 
 import Editor from '../components/base/Editor'
-import Prompts from '../components/modals/Prompts'
+import Modals from '../components/modals/ModalContainer'
 import KeyValueEditor from '../components/base/KeyValueEditor'
 import RequestBodyEditor from '../components/RequestBodyEditor'
 import RequestAuthEditor from '../components/RequestAuthEditor'
 import RequestUrlBar from '../components/RequestUrlBar'
 import Sidebar from '../components/Sidebar'
-import RequestGroupEnvironmentEditModal from '../components/modals/RequestGroupEnvironmentEditModal'
 
 import * as GlobalActions from '../actions/global'
 import * as RequestGroupActions from '../actions/requestGroups'
 import * as RequestActions from '../actions/requests'
 import * as ResponseActions from '../actions/responses'
-import * as ModalActions from '../actions/modals'
 
 // Don't inject component styles (use our own)
 Tabs.setUseDefaultStyles(false);
@@ -61,7 +59,7 @@ class App extends Component {
                   request={activeRequest}/>
               </TabPanel>
               <TabPanel className="grid__cell grid__cell--scroll--v">
-                <div className="wide pad">
+                <div className="wide">
                   <KeyValueEditor
                     pairs={activeRequest.params}
                     onChange={params => actions.updateRequest({id: activeRequest.id, params})}
@@ -69,7 +67,7 @@ class App extends Component {
                 </div>
               </TabPanel>
               <TabPanel className="grid__cell grid__cell--scroll--v">
-                <div className="wide pad">
+                <div className="wide">
                   <RequestAuthEditor
                     request={activeRequest}
                     onChange={authentication => actions.updateRequest({id: activeRequest.id, authentication})}
@@ -77,7 +75,7 @@ class App extends Component {
                 </div>
               </TabPanel>
               <TabPanel className="grid__cell grid__cell--scroll--v">
-                <div className="wide pad">
+                <div className="wide">
                   <KeyValueEditor
                     pairs={activeRequest.headers}
                     onChange={headers => actions.updateRequest({id: activeRequest.id, headers})}
@@ -146,19 +144,13 @@ class App extends Component {
   }
 
   render () {
-    const {actions, requests, responses, requestGroups, tabs, modals} = this.props;
+    const {actions, requests, responses, requestGroups, tabs} = this.props;
     const activeRequest = requests.all.find(r => r.id === requests.active);
     const activeResponse = responses[activeRequest && activeRequest.id];
 
     return (
       <div className="grid bg-super-dark tall">
-        <Prompts />
-        {!modals.find(m => m.id === RequestGroupEnvironmentEditModal.defaultProps.id) ? null : (
-          <RequestGroupEnvironmentEditModal
-            onClose={() => actions.hideModal(RequestGroupEnvironmentEditModal.defaultProps.id)}
-            onChange={v => console.log(v)}
-          />
-        )}
+        <Modals />
         <Sidebar
           activateRequest={actions.activateRequest}
           changeFilter={actions.changeFilter}
@@ -200,8 +192,7 @@ App.propTypes = {
     active: PropTypes.string // "required" but can be null
   }).isRequired,
   responses: PropTypes.object.isRequired,
-  tabs: PropTypes.object.isRequired,
-  modals: PropTypes.array.isRequired
+  tabs: PropTypes.object.isRequired
 };
 
 function mapStateToProps (state) {
@@ -210,8 +201,7 @@ function mapStateToProps (state) {
     requests: state.requests,
     requestGroups: state.requestGroups,
     responses: state.responses,
-    tabs: state.tabs,
-    modals: state.modals
+    tabs: state.tabs
   };
 }
 
@@ -220,7 +210,6 @@ function mapDispatchToProps (dispatch) {
     actions: Object.assign(
       {},
       bindActionCreators(GlobalActions, dispatch),
-      bindActionCreators(ModalActions, dispatch),
       bindActionCreators(RequestGroupActions, dispatch),
       bindActionCreators(RequestActions, dispatch),
       bindActionCreators(ResponseActions, dispatch)

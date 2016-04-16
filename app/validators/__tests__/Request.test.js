@@ -1,5 +1,6 @@
 jest.unmock('../request');
 jest.unmock('../../constants/global');
+jest.unmock('jsonschema');
 
 import validate from '../request';
 

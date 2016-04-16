@@ -1,7 +1,7 @@
-import nunjucks from 'nunjucks'
+import swig from 'swig'
 
-nunjucks.configure({autoescape: false});
-
-export default function (template, context = {}) {
-  return nunjucks.renderString(template, context);
+export default function (template, context) {
+  return swig.render(template, {
+    locals: context
+  })
 }

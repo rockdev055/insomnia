@@ -49,7 +49,6 @@ const BASE_CODEMIRROR_OPTIONS = {
   foldGutter: true,
   height: 'auto',
   lineWrapping: false,
-  tabSize: 4,
   gutters: [
     'CodeMirror-linenumbers',
     'CodeMirror-foldgutter',
@@ -128,7 +127,7 @@ class Editor extends Component {
     options = Object.assign({}, options);
 
     // Strip of charset if there is one
-    options.mode = options.mode ? options.mode.split(';')[0] : 'text/plain';
+    options.mode = options.mode.split(';')[0];
     
     if (options.mode === 'json') {
       options.mode = 'application/json';

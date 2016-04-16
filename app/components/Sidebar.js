@@ -138,7 +138,7 @@ class Sidebar extends Component {
     return (
       <aside className="sidebar bg-dark grid--v">
         <header className="header">
-          <WorkspaceDropdown />
+          <h1><WorkspaceDropdown /></h1>
         </header>
         <div className="grid--v grid--start grid__cell">
           <ul

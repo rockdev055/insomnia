@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var base = require('./base.config');
+var webpackTargetElectronRenderer = require('webpack-target-electron-renderer');
 
 base.entry = [
   'webpack-hot-middleware/client?path=http://localhost:3333/__webpack_hmr',
@@ -20,10 +21,23 @@ for (var i = 0; i < base.module.loaders.length; i++) {
   }
 }
 
-base.plugins = base.plugins.concat([
+base.plugins = [
   new webpack.HotModuleReplacementPlugin(),
-  new webpack.NoErrorsPlugin()
-]);
+  new webpack.NoErrorsPlugin(),
+  new webpack.DefinePlugin({
+    __DEV__: true,
+    'process.env': {
+      NODE_ENV: JSON.stringify('development')
+    }
+  }),
+  new webpack.ExternalsPlugin('commonjs', [
+    'request'
+  ])
+];
+
+base.target = webpackTargetElectronRenderer(base);
+
+base.resolve.extensions.push('electron.js');
 
 module.exports = base;
 
