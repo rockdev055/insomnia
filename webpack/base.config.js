@@ -1,7 +1,8 @@
 var path = require('path');
 var webpack = require('webpack');
+var webpackTargetElectronRenderer = require('webpack-target-electron-renderer');
 
-module.exports = {
+var config = {
   target: 'web',
   devtool: 'source-map',
   context: path.join(__dirname, '../app'),
@@ -17,16 +18,20 @@ module.exports = {
     loaders: [
       {
         id: 'babel',
-        test: /\.jsx?$/,
+        test: /\.(js|jsx)$/,
         loaders: ['babel'],
         exclude: /node_modules/
+      },
+      {
+        test: /\.json$/,
+        loader: 'json'
       },
       {
         test: /\.(scss|css)$/,
         loader: 'style!css!sass'
       },
       {
-        test: /\.(html)$/,
+        test: /\.html$/,
         loader: "file?name=[name].[ext]"
       },
       {
@@ -52,7 +57,23 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['', '.js', '.json', '.jsx'],
     packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main']
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      __DEV__: true,
+      'process.env': {
+        NODE_ENV: JSON.stringify('development')
+      }
+    }),
+    new webpack.ExternalsPlugin('commonjs', [
+      'request',
+      'nunjucks',
+      'pouchdb'
+    ])
+  ]
 };
+
+config.target = webpackTargetElectronRenderer(config);
+module.exports = config;

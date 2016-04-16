@@ -3,23 +3,33 @@ import {Validator} from 'jsonschema';
 const validator = new Validator();
 
 const environmentsSchema = {
-  id: '/RequestGroupEnvironment',
+  id: '/Environment',
   type: 'object',
-  properties: {}
+  properties: {
+    name: {type: 'string'},
+    data: {type: 'object'}
+  },
+  required: [
+    'data',
+    'name'
+  ],
+  additionalProperties: false
 };
 
 const requestGroupSchema = {
   id: '/RequestGroup',
   type: 'object',
   properties: {
-    id: {type: 'string', pattern: '^rg_[\\w]{10}$'},
+    _id: {type: 'string', pattern: '^rg_[\\w]{10}$'},
+    type: {type: 'string', pattern: '^RequestGroup$'},
     created: {type: 'number', minimum: 1000000000000, maximum: 10000000000000},
     modified: {type: 'number', minimum: 1000000000000, maximum: 10000000000000},
     name: {type: 'string', minLength: 1},
-    environment: {type: 'object'}
+    environment: {ref: '/Environment'}
   },
   required: [
-    'id',
+    '_id',
+    'type',
     'created',
     'modified',
     'name',
@@ -27,6 +37,8 @@ const requestGroupSchema = {
   ],
   additionalProperties: false
 };
+
+validator.addSchema(environmentsSchema);
 
 export default function (requestGroup) {
   return validator.validate(requestGroup, requestGroupSchema);
