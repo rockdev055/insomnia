@@ -1,0 +1,26 @@
+@import '../constants/dimensions';
+
+.tag {
+  display: inline-block;
+  border: 1px solid;
+  padding: $padding-sm;
+  margin-right: 1em;
+  line-height: 1em;
+  box-sizing: border-box;
+  border-radius: $radius-md;
+  text-align: center;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &.tag--small {
+    padding: $padding-xs;
+    font-size: $font-size-xs;
+    border-radius: $radius-sm;
+  }
+
+  &.tag--no-border {
+    border-width: 0;
+  }
+}

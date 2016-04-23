@@ -1,0 +1,167 @@
+@import '../constants/colors';
+@import '../constants/dimensions';
+
+html {
+  font-family: 'Open Sans', sans-serif;
+  font-size: $font-size;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: $font-size-xxl;
+}
+
+h2 {
+  font-size: $font-size-xl;
+}
+
+h3 {
+  font-size: $font-size-lg;
+}
+
+h1, h2, h3 {
+  padding-top: 1.5em;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  background-color: $hl-md;
+  border: 0;
+  margin: $padding-md 0;
+}
+
+.monospace {
+  font-family: monospace;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.tall {
+  height: 100%;
+}
+
+.wide {
+  width: 100%;
+}
+
+.relative {
+  position: relative;
+}
+
+/* Make all font awesome icons the same width */
+i.fa {
+  width: 1.1em;
+  text-align: center;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.pad {
+  box-sizing: border-box;
+  padding: $padding-md;
+}
+
+.pad-left-half {
+  padding-left: $padding-md / 2;
+}
+
+.pad-right-half {
+  padding-right: $padding-md / 2;
+}
+
+.no-pad {
+  padding: 0 !important;
+}
+
+.wide {
+  width: 100%;
+}
+
+.block {
+  display: block !important;
+}
+
+.inline-block {
+  display: inline-block !important;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.selectable {
+  -webkit-user-select: text;
+  cursor: text;
+}
+
+.hide-scrollbars {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.scrollable {
+  overflow: auto;
+}
+
+.hover-scrollbars {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &:hover::-webkit-scrollbar {
+    display: block;
+  }
+}
+
+.section.section--bordered {
+  .section__header {
+    border-right: 1px solid #eee;
+
+    &.bg-brand {
+      border-right-color: $bg-brand;
+    }
+  }
+
+  .section__body {
+    border-right: 1px solid $hl-sm;
+  }
+}
+
+strong {
+  font-weight: 600;
+}
+
+@media (max-width: $breakpoint-md) {
+  html {
+    font-size: $font-size * 0.95;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  html {
+    font-size: $font-size * 0.9;
+  }
+}
