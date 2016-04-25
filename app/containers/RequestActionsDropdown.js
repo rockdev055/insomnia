@@ -17,7 +17,7 @@ class RequestActionsDropdown extends Component {
         <ul>
           <li>
             <button onClick={e => db.requestCopy(request)}>
-              <i className="fa fa-copy"></i> Clone
+              <i className="fa fa-copy"></i> Duplicate
             </button>
           </li>
           <li>

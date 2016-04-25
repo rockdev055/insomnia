@@ -4,40 +4,36 @@ import Dropdown from './base/Dropdown';
 import {METHODS} from '../lib/constants';
 
 class UrlInput extends Component {
-  _handleFormSubmit (e) {
-    e.preventDefault();
-    this.props.sendRequest();
-  }
-
   render () {
-    const {onUrlChange, onMethodChange, uniquenessKey, url, method} = this.props;
+    const {sendRequest, onUrlChange, onMethodChange, request} = this.props;
     return (
       <div className="tall grid grid--center wide bg-super-light">
         <Dropdown className="tall">
           <button className="pad tall txt-md">
-            {method}&nbsp;
-            <i className="fa fa-caret-down"></i>
+            {request.method}&nbsp;<i className="fa fa-caret-down"></i>
           </button>
           <ul>
-            {METHODS.map(m => (
-              <li key={m}>
-                <button onClick={onMethodChange.bind(null, m)}>{m}</button>
+            {METHODS.map((method) => (
+              <li key={method}>
+                <button onClick={onMethodChange.bind(null, method)}>
+                  {method}
+                </button>
               </li>
             ))}
           </ul>
         </Dropdown>
         <form className="tall grid__cell form-control form-control--wide"
-              onSubmit={this._handleFormSubmit.bind(this)}>
+              onSubmit={e => {e.preventDefault(); sendRequest(request)}}>
           <DebouncingInput
             type="text"
             className="txt-md"
             placeholder="http://echo.insomnia.rest/status/200"
-            value={url}
+            value={request.url}
             debounceMillis={1000}
-            uniquenessKey={uniquenessKey}
+            uniquenessKey={request._id}
             onChange={onUrlChange}/>
         </form>
-        <button className="btn btn--compact txt-lg" onClick={this._handleFormSubmit.bind(this)}>
+        <button className="btn btn--compact txt-lg" onClick={sendRequest.bind(null, request)}>
           Send
         </button>&nbsp;&nbsp;
       </div>
@@ -49,9 +45,10 @@ UrlInput.propTypes = {
   sendRequest: PropTypes.func.isRequired,
   onUrlChange: PropTypes.func.isRequired,
   onMethodChange: PropTypes.func.isRequired,
-  uniquenessKey: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  method: PropTypes.string.isRequired
+  request: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+    method: PropTypes.string.isRequired
+  }).isRequired
 };
 
 export default UrlInput;

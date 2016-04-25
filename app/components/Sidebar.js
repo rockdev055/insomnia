@@ -1,35 +1,62 @@
 import React, {Component, PropTypes} from 'react'
 import classnames from 'classnames'
 import WorkspaceDropdown from './../containers/WorkspaceDropdown'
+import RequestActionsDropdown from './../containers/RequestActionsDropdown'
 import RequestGroupActionsDropdown from './../containers/RequestGroupActionsDropdown'
 import DebouncingInput from './base/DebouncingInput'
-import SidebarRequestRow from './SidebarRequestRow'
+import MethodTag from './MethodTag'
+import * as db from '../database'
 
 class Sidebar extends Component {
   onFilterChange (value) {
     this.props.changeFilter(value);
   }
 
-  renderRequestGroupRow (child, parent) {
+  renderRequestGroupRow (requestGroup = null) {
     const {
-      filter,
-      activeRequestId,
+      activeFilter,
+      activeRequest,
       addRequestToRequestGroup,
-      toggleRequestGroup
+      toggleRequestGroup,
+      requests
     } = this.props;
-    
-    const requestGroup = child.doc.type === 'RequestGroup' ? child.doc : null;
+
+    let filteredRequests = requests.filter(
+      r => {
+        // TODO: Move this to a lib file
+
+        if (!activeFilter) {
+          return true;
+        }
+
+        const requestGroupName = requestGroup ? requestGroup.name : '';
+        const toMatch = `${requestGroupName}✌${r.method}✌${r.name}`.toLowerCase();
+        const matchTokens = activeFilter.toLowerCase().split(' ');
+        for (let i = 0; i < matchTokens.length; i++) {
+          let token = `${matchTokens[i]}`;
+          if (toMatch.indexOf(token) === -1) {
+            return false;
+          }
+        }
+
+        return true;
+      }
+    );
 
     if (!requestGroup) {
-      return child.children.map(c => this._renderChild(c, child));
+      filteredRequests = filteredRequests.filter(r => !r.parent);
+      return filteredRequests.map(request => this.renderRequestRow(request));
     }
 
+    // Grab all of the children for this request group
+    filteredRequests = filteredRequests.filter(r => r.parent === requestGroup._id);
+
     // Don't show folder if it was not in the filter
-    if (filter && !child.children.length) {
+    if (activeFilter && !filteredRequests.length) {
       return null;
     }
 
-    const isActive = activeRequestId && child.children.find(c => c.doc._id == activeRequestId);
+    const isActive = activeRequest && filteredRequests.find(r => r._id == activeRequest._id);
 
     let folderIconClass = 'fa-folder';
     let expanded = !requestGroup.collapsed;
@@ -41,8 +68,6 @@ class Sidebar extends Component {
       'sidebar__item--bordered',
       {'sidebar__item--active': isActive}
     );
-
-    child.children.sort((a, b) => a.doc._id > b.doc._id ? -1 : 1);
 
     return (
       <li key={requestGroup._id}>
@@ -64,55 +89,44 @@ class Sidebar extends Component {
           </div>
         </div>
         <ul>
-          {expanded && !child.children.length ? this.renderRequestRow() : null}
-          {!expanded ? null : child.children.map(c => this._renderChild(c, child))}
+          {expanded && !filteredRequests.length ? this.renderRequestRow() : null}
+          {!expanded ? null : filteredRequests.map(request => this.renderRequestRow(request, requestGroup))}
         </ul>
       </li>
     );
   }
 
-  renderRequestRow (child = null, parent = null) {
-    const request = child ? child.doc : null;
-    const requestGroup = parent ? parent.doc : null;
-    const {activeRequestId, activateRequest} = this.props;
-    const isActive = request && activeRequestId && request._id === activeRequestId || false;
+  renderRequestRow (request = null, requestGroup = null) {
+    const {activeRequest, activateRequest} = this.props;
+    const isActive = request && activeRequest && request._id === activeRequest._id;
 
     return (
-      <SidebarRequestRow
-        key={request ? request._id : null}
-        activateRequest={activateRequest}
-        isActive={isActive}
-        request={request}
-        requestGroup={requestGroup}
-      />
-    )
-  }
-
-  _renderChild (child, parent = null) {
-    const {filter} = this.props;
-
-    if (child.doc.type === 'Request') {
-      const r = child.doc;
-      const toMatch = `${r.method}❅${r.name}`.toLowerCase();
-      const matchTokens = filter.toLowerCase().split(' ');
-      for (let i = 0; i < matchTokens.length; i++) {
-        let token = `${matchTokens[i]}`;
-        if (toMatch.indexOf(token) === -1) {
-          // Filter failed. Don't render children
-          return null;
-        }
-      }
-
-      return this.renderRequestRow(child, parent)
-    } else if (child.doc.type === 'RequestGroup') {
-      return this.renderRequestGroupRow(child, parent);
-    } else {
-      console.error('Unknown child type', child.doc.type);
-    }
+      <li key={request ? request._id : 'none'}>
+        <div className={'sidebar__item ' + (isActive ? 'sidebar__item--active' : '')}>
+          <div className="sidebar__item__row">
+            {request ? (
+              <button onClick={() => {activateRequest(request)}}>
+                <MethodTag method={request.method}/> {request.name}
+              </button>
+            ) : (
+              <button className="italic">No Requests</button>
+            )}
+          </div>
+          {request ? (
+            <RequestActionsDropdown
+              className="sidebar__item__btn"
+              right={true}
+              request={request}
+              requestGroup={requestGroup}
+            />
+          ) : null}
+        </div>
+      </li>
+    );
   }
 
   render () {
-    const {filter, children} = this.props;
+    const {activeFilter, requestGroups} = this.props;
 
     return (
       <section className="sidebar bg-dark grid--v section section--bordered">
@@ -122,7 +136,8 @@ class Sidebar extends Component {
         <div className="grid--v grid--start grid__cell section__body">
           <ul
             className="grid--v grid--start grid__cell sidebar__scroll hover-scrollbars sidebar__request-list">
-            {children.map(c => this._renderChild(c))}
+            {this.renderRequestGroupRow(null)}
+            {requestGroups.map(requestGroup => this.renderRequestGroupRow(requestGroup))}
           </ul>
           <div className="grid grid--center">
             <div className="grid__cell form-control form-control--underlined">
@@ -130,7 +145,7 @@ class Sidebar extends Component {
                 type="text"
                 placeholder="Filter Items"
                 debounceMillis={300}
-                value={filter}
+                value={activeFilter}
                 onChange={this.onFilterChange.bind(this)}/>
             </div>
           </div>
@@ -141,19 +156,14 @@ class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
-  // Functions
   activateRequest: PropTypes.func.isRequired,
-  toggleRequestGroup: PropTypes.func.isRequired,
   addRequestToRequestGroup: PropTypes.func.isRequired,
   changeFilter: PropTypes.func.isRequired,
-
-  // Other
-  children: PropTypes.array.isRequired,
-  workspaceId: PropTypes.string.isRequired,
-
-  // Optional
-  filter: PropTypes.string,
-  activeRequestId: PropTypes.string
+  toggleRequestGroup: PropTypes.func.isRequired,
+  activeFilter: PropTypes.string,
+  requests: PropTypes.array.isRequired,
+  requestGroups: PropTypes.array.isRequired,
+  activeRequest: PropTypes.object
 };
 
 export default Sidebar;

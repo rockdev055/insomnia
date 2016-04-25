@@ -29,7 +29,7 @@ h3 {
 }
 
 h1, h2, h3 {
-  padding-bottom: 1em;
+  padding-top: 1.5em;
 }
 
 hr {
@@ -38,11 +38,6 @@ hr {
   background-color: $hl-md;
   border: 0;
   margin: $padding-md 0;
-}
-
-label {
-  color: $hl-xxl;
-  font-size: 0.9em;
 }
 
 .monospace {

@@ -3,6 +3,8 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
 import * as ModalActions from '../redux/modules/modals'
+import * as RequestGroupActions from '../redux/modules/requestGroups'
+import * as RequestActions from '../redux/modules/requests'
 import PromptModal from '../components/base/PromptModal'
 
 import * as db from '../database'
@@ -63,6 +65,12 @@ Prompts.propTypes = {
   actions: PropTypes.shape({
     modals: PropTypes.shape({
       hide: PropTypes.func.isRequired
+    }),
+    requestGroups: PropTypes.shape({
+      update: PropTypes.func.isRequired
+    }),
+    requests: PropTypes.shape({
+      update: PropTypes.func.isRequired
     })
   }),
   modals: PropTypes.array.isRequired
@@ -78,7 +86,9 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     actions: {
-      modals: bindActionCreators(ModalActions, dispatch)
+      requests: bindActionCreators(RequestActions, dispatch),
+      modals: bindActionCreators(ModalActions, dispatch),
+      requestGroups: bindActionCreators(RequestGroupActions, dispatch)
     }
   }
 }

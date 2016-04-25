@@ -1,12 +1,29 @@
+const RESPONSE_UPDATE = 'responses/update';
+
+const initialState = {};
+
 // ~~~~~~~~ //
 // REDUCERS //
 // ~~~~~~~~ //
 
-// None yet
+export default function (state = initialState, action) {
+  switch (action.type) {
+
+    case RESPONSE_UPDATE:
+      return Object.assign({}, state, {
+        [action.response.requestId]: action.response
+      });
+
+    default:
+      return state;
+  }
+}
 
 
 // ~~~~~~~ //
 // ACTIONS //
 // ~~~~~~~ //
 
-// None yet...
+export function update (response) {
+  return {type: RESPONSE_UPDATE, response};
+}
