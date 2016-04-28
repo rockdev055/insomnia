@@ -84,7 +84,6 @@ class App extends Component {
             updateRequestParams={params => db.requestUpdate(activeRequest, {params})}
             updateRequestAuthentication={authentication => db.requestUpdate(activeRequest, {authentication})}
             updateRequestHeaders={headers => db.requestUpdate(activeRequest, {headers})}
-            updateRequestContentType={contentType => db.requestUpdate(activeRequest, {contentType})}
           />
           <ResponsePane
             response={activeResponse}

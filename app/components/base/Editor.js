@@ -70,16 +70,14 @@ class Editor extends Component {
   }
 
   componentDidMount () {
-    const {options, value} = this.props;
-    
     var textareaNode = this.refs.textarea;
 
     this.codeMirror = CodeMirror.fromTextArea(textareaNode, BASE_CODEMIRROR_OPTIONS);
     this.codeMirror.on('change', this._codemirrorValueChanged.bind(this));
     this.codeMirror.on('paste', this._codemirrorValueChanged.bind(this));
-    this._currentCodemirrorValue = value || '';
+    this._currentCodemirrorValue = this.props.value || '';
     this._codemirrorSetValue(this._currentCodemirrorValue);
-    this._codemirrorSetOptions(options);
+    this._codemirrorSetOptions(this.props.options);
   }
 
   componentWillUnmount () {
@@ -94,24 +92,22 @@ class Editor extends Component {
     if (!this.codeMirror) {
       return;
     }
-    
-    const {options, value} = this.props;
-
-    // Reset any options that may have changed
-    this._codemirrorSetOptions(options);
 
     // Don't update if no value passed
-    if (value === undefined) {
+    if (this.props.value === undefined) {
       return;
     }
 
     // Don't update if same value passed again
-    if (this._currentCodemirrorValue === value) {
+    if (this._currentCodemirrorValue === this.props.value) {
       return;
     }
 
+    // Reset any options that may have changed
+    this._codemirrorSetOptions(this.props.options);
+
     // Set the new value
-    this._codemirrorSetValue(value);
+    this._codemirrorSetValue(this.props.value);
   }
 
   /**
@@ -188,6 +184,14 @@ class Editor extends Component {
 
     this.codeMirror.setValue(code);
   }
+  
+  shouldComponentUpdate (nextProps) {
+    if (!this.props.uniquenessKey) {
+      return true;
+    } else {
+      return this.props.uniquenessKey !== nextProps.uniquenessKey;
+    }
+  }
 
   render () {
     const options = this.props.options || {};
@@ -219,7 +223,8 @@ Editor.propTypes = {
   value: PropTypes.string,
   prettify: PropTypes.bool,
   className: PropTypes.any,
-  debounceMillis: PropTypes.number
+  debounceMillis: PropTypes.number,
+  uniquenessKey: PropTypes.string
 };
 
 export default Editor;
