@@ -32,8 +32,6 @@ class EnvironmentsDropdown extends Component {
     const workspace = this._getActiveWorkspace(this.props);
 
     const allEnvironments = Object.keys(entities.environments).map(id => entities.environments[id]);
-
-    // NOTE: Base environment might not exist if the users hasn't managed environments yet.
     const baseEnvironment = allEnvironments.find(e => e.parentId === workspace._id);
     const subEnvironments = allEnvironments.filter(e => e.parentId === (baseEnvironment && baseEnvironment._id));
     const activeEnvironment = allEnvironments.find(e => e._id === workspace.metaActiveEnvironmentId) || baseEnvironment;
@@ -59,7 +57,7 @@ class EnvironmentsDropdown extends Component {
             </li>
           ))}
           <li>
-            <button onClick={() => baseEnvironment && this._handleActivateEnvironment(baseEnvironment)}>
+            <button onClick={() => this._handleActivateEnvironment(baseEnvironment)}>
               <i className="fa fa-empty"></i> No Environment
             </button>
           </li>

@@ -26,10 +26,6 @@ class RenderedQueryString extends Component {
     this._update(this.props);
   }
 
-  componentWillUnmount () {
-    clearTimeout(this._timeout);
-  }
-
   componentWillReceiveProps (nextProps) {
     let delay = true;
 
@@ -43,7 +39,7 @@ class RenderedQueryString extends Component {
 
   render () {
     if (this.state.string) {
-      return <span className="selectable">{this.state.string}</span>
+      return <span>{this.state.string}</span>
     } else {
       return <span className="super-faint">{this.props.placeholder || ''}</span>
     }
