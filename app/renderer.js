@@ -1,1 +1,1 @@
-import './ui';
+import './ui/index.js';
