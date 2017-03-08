@@ -45,7 +45,9 @@ Link.propTypes = {
   href: PropTypes.string.isRequired,
 
   // Optional
-  button: PropTypes.bool
+  button: PropTypes.bool,
+  onClick: PropTypes.func,
+  children: PropTypes.node
 };
 
 export default Link;

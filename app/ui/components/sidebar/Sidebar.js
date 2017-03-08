@@ -1,11 +1,11 @@
 import React, {PureComponent, PropTypes} from 'react';
 import autobind from 'autobind-decorator';
 import classnames from 'classnames';
-import EnvironmentsDropdown from '../dropdowns/EnvironmentsDropdown';
-import SidebarFilter from './SidebarFilter';
-import SidebarChildren from './SidebarChildren';
-import SyncButton from '../dropdowns/SyncDropdown';
-import WorkspaceDropdown from '../dropdowns/WorkspaceDropdown';
+import EnvironmentsDropdown from '../dropdowns/environments-dropdown';
+import SidebarFilter from './sidebar-filter';
+import SidebarChildren from './sidebar-children';
+import SyncButton from '../dropdowns/sync-dropdown';
+import WorkspaceDropdown from '../dropdowns/workspace-dropdown';
 import {SIDEBAR_SKINNY_REMS, COLLAPSE_SIDEBAR_REMS} from '../../../common/constants';
 
 @autobind
@@ -29,7 +29,7 @@ class Sidebar extends PureComponent {
     const {
       showCookiesModal,
       filter,
-      children,
+      childObjects,
       hidden,
       width,
       workspace,
@@ -96,7 +96,7 @@ class Sidebar extends PureComponent {
         />
 
         <SidebarChildren
-          children={children}
+          childObjects={childObjects}
           handleActivateRequest={handleActivateRequest}
           handleCreateRequest={handleCreateRequest}
           handleCreateRequestGroup={handleCreateRequestGroup}
@@ -144,7 +144,7 @@ Sidebar.propTypes = {
   width: PropTypes.number.isRequired,
   isLoading: PropTypes.bool.isRequired,
   workspace: PropTypes.object.isRequired,
-  children: PropTypes.arrayOf(PropTypes.object).isRequired,
+  childObjects: PropTypes.arrayOf(PropTypes.object).isRequired,
   workspaces: PropTypes.arrayOf(PropTypes.object).isRequired,
   environments: PropTypes.arrayOf(PropTypes.object).isRequired,
 
