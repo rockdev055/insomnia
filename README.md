@@ -47,4 +47,4 @@ npm test
 
 ## License
 
-[GNU AGPLv3](LICENSE) &copy; [Insomnia](https://insomnia.rest)
+[GNU GPLv3](LICENSE) &copy; [Insomnia](https://insomnia.rest)
