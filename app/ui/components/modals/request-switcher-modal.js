@@ -246,13 +246,13 @@ class RequestSwitcherModal extends PureComponent {
               return (
                 <li key={r._id}>
                   <Button onClick={this._activateRequest} value={r} className={buttonClasses}>
-                    {requestGroup && (
-                      <div className="pull-right faint italic">
-                        {requestGroup.name}
-                        &nbsp;&nbsp;
-                        <i className="fa fa-folder-o"></i>
-                      </div>
-                    )}
+                    {requestGroup ? (
+                        <div className="pull-right faint italic">
+                          {requestGroup.name}
+                          &nbsp;&nbsp;
+                          <i className="fa fa-folder-o"></i>
+                        </div>
+                      ) : null}
                     <MethodTag method={r.method}/>
                     <strong>{r.name}</strong>
                   </Button>
@@ -260,11 +260,10 @@ class RequestSwitcherModal extends PureComponent {
               );
             })}
 
-            {matchedRequests.length && matchedWorkspaces.length && (
-              <div className="pad-left pad-right">
-                <hr/>
-              </div>
-            )}
+            {matchedRequests.length && matchedWorkspaces.length
+              ? <div className="pad-left pad-right"><hr/></div>
+              : null
+            }
 
             {matchedWorkspaces.map((w, i) => {
               const buttonClasses = classnames(
@@ -284,19 +283,19 @@ class RequestSwitcherModal extends PureComponent {
             })}
           </ul>
 
-          {(!matchedRequests.length && !matchedWorkspaces.length) && (
-            <div className="text-center">
-              <p>
-                No matches found for <strong>{searchString}</strong>
-              </p>
+          {!matchedRequests.length && !matchedWorkspaces.length ? (
+              <div className="text-center">
+                <p>
+                  No matches found for <strong>{searchString}</strong>
+                </p>
 
-              <button className="btn btn--outlined btn--compact"
-                      disabled={!searchString}
-                      onClick={this._activateCurrentIndex}>
-                Create a request named {searchString}
-              </button>
-            </div>
-          )}
+                <button className="btn btn--outlined btn--compact"
+                        disabled={!searchString}
+                        onClick={this._activateCurrentIndex}>
+                  Create a request named {searchString}
+                </button>
+              </div>
+            ) : null}
         </ModalBody>
       </Modal>
     );

@@ -32,7 +32,6 @@ class WorkspaceSettingsModal extends PureComponent {
   _handleSetModalRef (n) {
     this.modal = n;
   }
-
   _handleRemoveWorkspace () {
     this.props.handleRemoveWorkspace();
     this.hide();
@@ -45,7 +44,6 @@ class WorkspaceSettingsModal extends PureComponent {
   _handleRename (name) {
     this._workspaceUpdate({name});
   }
-
   _handleDescriptionChange (description) {
     this._workspaceUpdate({description});
   }
@@ -53,23 +51,18 @@ class WorkspaceSettingsModal extends PureComponent {
   _handleCreateHostChange (e) {
     this.setState({host: e.target.value});
   }
-
   _handleCreatePfxChange (pfxPath) {
     this.setState({pfxPath});
   }
-
   _handleCreateCrtChange (crtPath) {
     this.setState({crtPath});
   }
-
   _handleCreateKeyChange (keyPath) {
     this.setState({keyPath});
   }
-
   _handleCreatePassphraseChange (e) {
     this.setState({passphrase: e.target.value});
   }
-
   async _handleSubmitCertificate (e) {
     e.preventDefault();
 
@@ -145,10 +138,6 @@ class WorkspaceSettingsModal extends PureComponent {
     return (
       <ModalHeader key={`header::${workspace._id}`}>
         Workspace Settings
-        {' '}
-        <div className="txt-sm selectable faint monospace">
-          {workspace ? workspace._id : ''}
-        </div>
       </ModalHeader>
     );
   }

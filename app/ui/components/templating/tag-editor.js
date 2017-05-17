@@ -13,8 +13,6 @@ const TAGS = [
   // 'response'
 ];
 
-const CUSTOM_TAG_VALUE = `{% custom 'tag' %}`;
-
 @autobind
 class TagEditor extends PureComponent {
   constructor (props) {
@@ -81,17 +79,15 @@ class TagEditor extends PureComponent {
 
   render () {
     const {error, value, preview, tags, selectValue} = this.state;
-    const isFound = !!tags.find(v => value === `{% ${v.name} %}`);
+    const isFound = !tags.find(v => value === `{% ${v.name} %}`);
     const isFlexible = value.indexOf('{% base64') === 0;
-    const isCustom = !isFound && !isFlexible;
+    const isOther = isFound || isFlexible;
 
     return (
       <div>
         <div className="form-control form-control--outlined">
           <label>Template Function
-            <select ref={this._setSelectRef}
-                    onChange={this._handleChange}
-                    value={isCustom ? CUSTOM_TAG_VALUE : selectValue}>
+            <select ref={this._setSelectRef} onChange={this._handleChange} value={selectValue}>
               {tags.map((t, i) => (
                 <option key={`${i}::${t.name}`} value={`{% ${t.name}${t.suffix || ''} %}`}>
                   {t.name}
@@ -103,7 +99,7 @@ class TagEditor extends PureComponent {
             </select>
           </label>
         </div>
-        {(!isFound || isFlexible) && (
+        {isOther ? (
           <div className="form-control form-control--outlined">
             <Input
               key={selectValue}
@@ -114,7 +110,7 @@ class TagEditor extends PureComponent {
               onChange={this._update}
             />
           </div>
-        )}
+        ) : null}
         <div className="form-control form-control--outlined">
           <label>Live Preview
             {error

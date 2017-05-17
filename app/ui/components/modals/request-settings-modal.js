@@ -113,11 +113,7 @@ class RequestSettingsModal extends PureComponent {
     const {request} = this.state;
     return (
       <Modal ref={this._setModalRef} freshState>
-        <ModalHeader>
-          Request Settings
-          {' '}
-          <span className="txt-sm selectable faint monospace">{request ? request._id : ''}</span>
-        </ModalHeader>
+        <ModalHeader>Request Settings</ModalHeader>
         <ModalBody className="pad">
           {request ? this.renderModalBody(request) : null}
         </ModalBody>
