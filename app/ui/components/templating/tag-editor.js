@@ -161,9 +161,16 @@ class TagEditor extends PureComponent {
     return (
       <select value={value} onChange={this._handleChange}>
         {options.map(option => {
+          let label;
+          if (option.description) {
+            label = `${option.name} – ${option.description}`;
+          } else {
+            label = option.name;
+          }
+
           return (
             <option key={option.value} value={option.value}>
-              {option.name}
+              {label}
             </option>
           );
         })}

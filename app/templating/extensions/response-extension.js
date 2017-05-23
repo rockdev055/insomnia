@@ -29,9 +29,9 @@ export default class ResponseExtension extends BaseExtension {
         label: 'Attribute',
         type: 'enum',
         options: [
-          {name: 'Body – attribute of response body', value: 'body'},
-          {name: 'Raw Body – entire response body', value: 'raw'},
-          {name: 'Header – value of response header', value: 'header'}
+          {name: 'Body', description: 'attribute of response body', value: 'body'},
+          {name: 'Raw Body', description: 'entire response body', value: 'raw'},
+          {name: 'Header', description: 'value of response header', value: 'header'}
         ]
       },
       {
