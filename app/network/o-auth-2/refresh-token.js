@@ -1,7 +1,7 @@
 import * as querystring from '../../common/querystring';
 import * as c from './constants';
 import {responseToObject} from './misc';
-import {getBasicAuthHeader, setDefaultProtocol} from '../../common/misc';
+import {getBasicAuthHeader} from '../../common/misc';
 
 export default async function (accessTokenUrl,
                                credentialsInBody,
@@ -36,9 +36,7 @@ export default async function (accessTokenUrl,
     headers: headers
   };
 
-  const url = setDefaultProtocol(accessTokenUrl);
-
-  const response = await window.fetch(url, config);
+  const response = await window.fetch(accessTokenUrl, config);
   const body = await response.text();
   const results = responseToObject(body, [
     c.P_ACCESS_TOKEN,

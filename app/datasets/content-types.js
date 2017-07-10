@@ -63,7 +63,6 @@ export default [
   'application/shf+xml',
   'application/timestamped-data',
   'application/vnd.android.package-archive',
-  'application/vnd.api+json',
   'application/vnd.apple.installer+xml',
   'application/vnd.apple.mpegurl',
   'application/vnd.apple.pkpass',
