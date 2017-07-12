@@ -139,7 +139,6 @@ export const AUTH_BASIC = 'basic';
 export const AUTH_DIGEST = 'digest';
 export const AUTH_BEARER = 'bearer';
 export const AUTH_NTLM = 'ntlm';
-export const AUTH_AWS_IAM = 'iam';
 
 const authTypesMap = {
   [AUTH_BASIC]: ['Basic', 'Basic Auth'],
@@ -147,8 +146,7 @@ const authTypesMap = {
   [AUTH_NTLM]: ['NTLM', 'Microsoft NTLM'],
   [AUTH_BEARER]: ['Bearer', 'Bearer Token'],
   [AUTH_OAUTH_1]: ['OAuth 1', 'OAuth 1.0'],
-  [AUTH_OAUTH_2]: ['OAuth 2', 'OAuth 2.0'],
-  [AUTH_AWS_IAM]: ['AWS', 'AWS IAM v4']
+  [AUTH_OAUTH_2]: ['OAuth 2', 'OAuth 2.0']
 };
 
 export function getPreviewModeName (previewMode, useLong = false) {
