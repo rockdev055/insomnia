@@ -11,7 +11,6 @@ import {reload} from '../../../templating/index';
 import installPlugin from '../../../plugins/install';
 import HelpTooltip from '../help-tooltip';
 import Link from '../base/link';
-import {delay} from '../../../common/misc';
 
 @autobind
 class Plugins extends React.PureComponent {
@@ -19,8 +18,7 @@ class Plugins extends React.PureComponent {
     plugins: Array<Plugin>,
     npmPluginValue: string,
     error: string,
-    isInstallingFromNpm: boolean,
-    isRefreshingPlugins: boolean
+    loading: boolean
   };
 
   constructor (props: any) {
@@ -29,8 +27,7 @@ class Plugins extends React.PureComponent {
       plugins: [],
       npmPluginValue: '',
       error: '',
-      isInstallingFromNpm: false,
-      isRefreshingPlugins: false
+      loading: false
     };
   }
 
@@ -45,9 +42,9 @@ class Plugins extends React.PureComponent {
   async _handleAddFromNpm (e: Event): Promise<void> {
     e.preventDefault();
 
-    this.setState({isInstallingFromNpm: true});
+    this.setState({loading: true});
 
-    const newState = {isInstallingFromNpm: false, error: ''};
+    const newState = {loading: false, error: ''};
     try {
       await installPlugin(this.state.npmPluginValue);
       await this._handleRefreshPlugins();
@@ -58,24 +55,16 @@ class Plugins extends React.PureComponent {
     this.setState(newState);
   }
 
-  _handleOpenDirectory (directory: string): void {
+  _handleOpenDirectory (directory: string) {
     electron.remote.shell.showItemInFolder(directory);
   }
 
-  async _handleRefreshPlugins (): Promise<void> {
-    const start = Date.now();
-
-    this.setState({isRefreshingPlugins: true});
-
+  async _handleRefreshPlugins () {
     // Get and reload plugins
     const plugins = await getPlugins(true);
     reload();
 
-    // Delay loading for at least 500ms. UX FTW!
-    const delta = Date.now() - start;
-    await delay(500 - delta);
-
-    this.setState({plugins, isRefreshingPlugins: false});
+    this.setState({plugins});
     trackEvent('Plugins', 'Refresh');
   }
 
@@ -84,7 +73,7 @@ class Plugins extends React.PureComponent {
   }
 
   render () {
-    const {plugins, error, isInstallingFromNpm, isRefreshingPlugins} = this.state;
+    const {plugins, error, loading} = this.state;
 
     return (
       <div>
@@ -95,45 +84,41 @@ class Plugins extends React.PureComponent {
             Submit Feedback
           </Link> if you have any.
         </p>
-        {plugins.length === 0 ? (
-          <div className="text-center faint italic pad">No Plugins Added</div>
-        ) : (
-          <table className="table--fancy table--striped margin-top margin-bottom">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Version</th>
-              <th>Folder</th>
+        <table className="table--fancy table--striped margin-top margin-bottom">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Version</th>
+            <th>Folder</th>
+          </tr>
+          </thead>
+          <tbody>
+          {plugins.map(plugin => (
+            <tr key={plugin.name}>
+              <td>
+                {plugin.name}
+                {plugin.description && (
+                  <HelpTooltip info className="space-left">{plugin.description}</HelpTooltip>
+                )}
+              </td>
+              <td>{plugin.version}</td>
+              <td className="no-wrap" style={{width: '10rem'}}>
+                <CopyButton className="btn btn--outlined btn--super-duper-compact"
+                            title={plugin.directory}
+                            content={plugin.directory}>
+                  Copy Path
+                </CopyButton>
+                {' '}
+                <Button className="btn btn--outlined btn--super-duper-compact"
+                        onClick={this._handleOpenDirectory}
+                        value={plugin.directory}>
+                  Show Folder
+                </Button>
+              </td>
             </tr>
-            </thead>
-            <tbody>
-            {plugins.map(plugin => (
-              <tr key={plugin.name}>
-                <td>
-                  {plugin.name}
-                  {plugin.description && (
-                    <HelpTooltip info className="space-left">{plugin.description}</HelpTooltip>
-                  )}
-                </td>
-                <td>{plugin.version}</td>
-                <td className="no-wrap" style={{width: '10rem'}}>
-                  <CopyButton className="btn btn--outlined btn--super-duper-compact"
-                              title={plugin.directory}
-                              content={plugin.directory}>
-                    Copy Path
-                  </CopyButton>
-                  {' '}
-                  <Button className="btn btn--outlined btn--super-duper-compact"
-                          onClick={this._handleOpenDirectory}
-                          value={plugin.directory}>
-                    Show Folder
-                  </Button>
-                </td>
-              </tr>
-            ))}
-            </tbody>
-          </table>
-        )}
+          ))}
+          </tbody>
+        </table>
 
         {error && (
           <div className="notice error text-left margin-bottom">
@@ -148,13 +133,13 @@ class Plugins extends React.PureComponent {
           <div className="form-row">
             <div className="form-control form-control--outlined">
               <input onChange={this._handleAddNpmPluginChange}
-                     disabled={isInstallingFromNpm}
+                     disabled={loading}
                      type="text"
                      placeholder="npm-package-name"/>
             </div>
             <div className="form-control width-auto">
-              <button className="btn btn--clicky" disabled={isInstallingFromNpm}>
-                {isInstallingFromNpm && <i className="fa fa-refresh fa-spin space-right"/>}
+              <button className="btn btn--clicky" disabled={loading}>
+                {loading && <i className="fa fa-refresh fa-spin space-right"/>}
                 Install Plugin
               </button>
             </div>
@@ -164,14 +149,9 @@ class Plugins extends React.PureComponent {
         <hr/>
 
         <div className="text-right">
-          <button type="button"
-                  disabled={isRefreshingPlugins}
-                  className="btn btn--clicky"
+          <button type="button" className="btn btn--clicky"
                   onClick={this._handleRefreshPlugins}>
             Reload Plugin List
-            {isRefreshingPlugins && (
-              <i className="fa fa-refresh fa-spin space-left"/>
-            )}
           </button>
         </div>
       </div>
