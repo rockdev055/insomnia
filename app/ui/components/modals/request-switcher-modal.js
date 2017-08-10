@@ -1,6 +1,6 @@
-import React, {PropTypes, PureComponent} from 'react';
+import React, {PureComponent} from 'react';
+import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
-import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import Button from '../base/button';
 import Modal from '../base/modal';
@@ -217,7 +217,7 @@ class RequestSwitcherModal extends PureComponent {
     const requestGroups = workspaceChildren.filter(d => d.type === models.requestGroup.type);
 
     return (
-      <Modal ref={this._setModalRef} dontFocus tall onKeyDown={this._handleKeydown}>
+      <Modal ref={this._setModalRef} dontFocus tall>
         <ModalHeader hideCloseButton>
           <div className="pull-right txt-sm pad-right">
             <span className="monospace">tab</span> or
@@ -231,7 +231,7 @@ class RequestSwitcherModal extends PureComponent {
           <div>Quick Switch</div>
         </ModalHeader>
         <ModalBody className="request-switcher">
-          <div className="pad">
+          <div className="pad" onKeyDown={this._handleKeydown}>
             <div className="form-control form-control--outlined no-margin">
               <input
                 type="text"
