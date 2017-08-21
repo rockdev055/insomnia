@@ -3,41 +3,45 @@ import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import {Cookie} from 'tough-cookie';
 
-import {cookieToString} from '../../common/cookies';
-import PromptButton from './base/prompt-button';
+import PromptButton from '../base/prompt-button';
+import CookieInput from '../cookie-input';
+import {cookieToString} from '../../../common/cookies';
+import {DEBOUNCE_MILLIS} from '../../../common/constants';
 
 @autobind
-class CookieList extends PureComponent {
-  shouldComponentUpdate (nextProps, nextState) {
-    return nextProps.cookies !== this.props.cookies;
-  }
-
+class CookiesEditor extends PureComponent {
   _handleCookieAdd () {
     const newCookie = new Cookie({
       key: 'foo',
       value: 'bar',
       domain: this.props.newCookieDomainName,
-      path: '/',
-      secure: false,
-      httpOnly: false
+      path: '/'
     });
 
     this.props.onCookieAdd(newCookie);
+  }
+
+  _handleCookieUpdate (cookie, cookieStr) {
+    clearTimeout(this._cookieUpdateTimeout);
+    this._cookieUpdateTimeout = setTimeout(() => {
+      const newCookie = Cookie.parse(cookieStr);
+      this.props.onCookieUpdate(cookie, newCookie);
+    }, DEBOUNCE_MILLIS * 2);
   }
 
   _handleDeleteCookie (cookie) {
     this.props.onCookieDelete(cookie);
   }
 
-  render () {
-    const {
-      cookies,
-      handleShowModifyCookieModal
-    } = this.props;
+  shouldComponentUpdate (nextProps, nextState) {
+    return nextProps.cookies !== this.props.cookies;
+  }
 
+  render () {
+    const {cookies} = this.props;
     return (
       <div>
-        <table className="table--fancy cookie-table table--striped">
+        <table className="table--fancy cookie-edit-table table--striped">
           <thead>
           <tr>
             <th style={{minWidth: '10rem'}}>Domain</th>
@@ -57,17 +61,16 @@ class CookieList extends PureComponent {
 
             return (
               <tr className="selectable" key={i}>
-                <td
-                  onClick={() => handleShowModifyCookieModal(cookie)}>
-                  {cookie.domain}
+                <td>{cookie.domain}</td>
+                <td>
+                  <div className="form-control form-control--underlined no-margin">
+                    <CookieInput
+                      defaultValue={cookieString}
+                      onChange={value => this._handleCookieUpdate(cookie, value)}
+                    />
+                  </div>
                 </td>
-                <td
-                  onClick={() => handleShowModifyCookieModal(cookie)}>
-                  {cookieString}
-                </td>
-                <td
-                  onClick={null}
-                  className="text-right">
+                <td className="text-right">
                   <PromptButton className="btn btn--super-compact"
                                 addIcon
                                 confirmMessage=" "
@@ -99,12 +102,12 @@ class CookieList extends PureComponent {
   }
 }
 
-CookieList.propTypes = {
+CookiesEditor.propTypes = {
+  onCookieUpdate: PropTypes.func.isRequired,
   onCookieAdd: PropTypes.func.isRequired,
   onCookieDelete: PropTypes.func.isRequired,
   cookies: PropTypes.array.isRequired,
-  newCookieDomainName: PropTypes.string.isRequired,
-  handleShowModifyCookieModal: PropTypes.func.isRequired
+  newCookieDomainName: PropTypes.string.isRequired
 };
 
-export default CookieList;
+export default CookiesEditor;

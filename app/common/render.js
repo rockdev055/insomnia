@@ -238,12 +238,6 @@ export async function getRenderedRequest (
     request.settingDisableRenderRequestBody ? /^body.*/ : null
   );
 
-  // Render cookies
-  const renderedCookieJar = await render(
-    cookieJar,
-    renderContext
-  );
-
   // Remove disabled params
   renderedRequest.parameters = renderedRequest.parameters.filter(p => !p.disabled);
 
@@ -266,7 +260,7 @@ export async function getRenderedRequest (
   return {
     // Add the yummy cookies
     // TODO: Eventually get rid of RenderedRequest type and put these elsewhere
-    cookieJar: renderedCookieJar,
+    cookieJar,
     cookies: [],
 
     // NOTE: Flow doesn't like Object.assign, so we have to do each property manually
