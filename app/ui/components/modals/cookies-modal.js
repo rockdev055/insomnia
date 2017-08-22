@@ -1,86 +1,81 @@
+// @flow
 import React, {PureComponent} from 'react';
-import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import Modal from '../base/modal';
 import ModalBody from '../base/modal-body';
 import ModalHeader from '../base/modal-header';
 import ModalFooter from '../base/modal-footer';
-import CookiesEditor from '../editors/cookies-editor';
+import CookieList from '../cookie-list';
 import * as models from '../../../models';
 import {trackEvent} from '../../../analytics/index';
+import type {Cookie, CookieJar} from '../../../models/cookie-jar';
+import type {Workspace} from '../../../models/workspace';
 
 @autobind
 class CookiesModal extends PureComponent {
-  constructor (props) {
+  props: {
+    handleShowModifyCookieModal: Function,
+    handleRender: Function,
+    cookieJar: CookieJar,
+    workspace: Workspace
+  };
+
+  state: {
+    filter: string
+  };
+
+  modal: Modal | null;
+  filterInput: HTMLInputElement | null;
+
+  constructor (props: any) {
     super(props);
     this.state = {
-      cookieJar: null,
-      workspace: null,
       filter: ''
     };
   }
 
-  _setModalRef (n) {
+  _setModalRef (n: React.Element<*> | null) {
     this.modal = n;
   }
 
-  _setFilterInputRef (n) {
+  _setFilterInputRef (n: HTMLInputElement | null) {
     this.filterInput = n;
   }
 
   async _saveChanges () {
-    const {cookieJar} = this.state;
+    const {cookieJar} = this.props;
     await models.cookieJar.update(cookieJar);
-    this._load();
   }
 
-  _handleCookieUpdate (oldCookie, cookie) {
-    const {cookieJar} = this.state;
+  async _handleCookieAdd (cookie: Cookie) {
+    const {cookieJar} = this.props;
     const {cookies} = cookieJar;
-    const index = cookies.findIndex(c => c.domain === oldCookie.domain && c.key === oldCookie.key);
 
-    cookieJar.cookies = [
-      ...cookies.slice(0, index),
-      cookie,
-      ...cookies.slice(index + 1)
-    ];
-
-    this._saveChanges(cookieJar);
-    trackEvent('Cookie', 'Update');
-  }
-
-  _handleCookieAdd (cookie) {
-    const {cookieJar} = this.state;
-    const {cookies} = cookieJar;
     cookieJar.cookies = [cookie, ...cookies];
-    this._saveChanges(cookieJar);
+    await this._saveChanges();
     trackEvent('Cookie', 'Create');
   }
 
-  _handleCookieDelete (cookie) {
-    const {cookieJar} = this.state;
+  async _handleCookieDelete (cookie: Cookie) {
+    const {cookieJar} = this.props;
     const {cookies} = cookieJar;
 
     // NOTE: This is sketchy because it relies on the same reference
     cookieJar.cookies = cookies.filter(c => c !== cookie);
 
-    this._saveChanges(cookieJar);
+    await this._saveChanges();
     trackEvent('Cookie', 'Delete');
   }
 
-  _handleFilterChange (e) {
+  _handleFilterChange (e: Event & {target: HTMLInputElement}) {
     const filter = e.target.value;
     this.setState({filter});
     trackEvent('Cookie Editor', 'Filter Change');
   }
 
   _getFilteredSortedCookies () {
-    const {cookieJar, filter} = this.state;
-
-    if (!cookieJar) {
-      // Nothing to do yet.
-      return [];
-    }
+    const {cookieJar} = this.props;
+    const {filter} = this.state;
 
     const {cookies} = cookieJar;
     return cookies.filter(c => {
@@ -89,41 +84,34 @@ class CookiesModal extends PureComponent {
     });
   }
 
-  async _load () {
-    const {workspace} = this.props;
-    const cookieJar = await models.cookieJar.getOrCreateForWorkspace(workspace);
-    this.setState({cookieJar});
-  }
-
   async show () {
-    await this._load();
+    this.modal && this.modal.show();
 
-    this.modal.show();
-
-    setTimeout(() => this.filterInput.focus(), 100);
-    trackEvent('Cookie Editor', 'Show');
+    setTimeout(() => {
+      this.filterInput && this.filterInput.focus();
+    }, 100);
+    trackEvent('Cookie Manager', 'Show');
   }
 
   hide () {
-    this.modal.hide();
-  }
-
-  toggle () {
-    if (this.modal.isOpen()) {
-      this.hide();
-    } else {
-      this.show();
-    }
+    this.modal && this.modal.hide();
   }
 
   render () {
     const filteredCookies = this._getFilteredSortedCookies();
-    const {filter} = this.state;
+    const {
+      handleShowModifyCookieModal,
+      handleRender
+    } = this.props;
+
+    const {
+      filter
+    } = this.state;
 
     return (
       <Modal ref={this._setModalRef} wide tall {...this.props}>
         <ModalHeader>Manage Cookies</ModalHeader>
-        <ModalBody className="cookie-editor" noScroll>
+        <ModalBody className="cookie-list" noScroll>
           <div className="pad">
             <div className="form-control form-control--outlined">
               <label>Filter Cookies
@@ -135,11 +123,12 @@ class CookiesModal extends PureComponent {
               </label>
             </div>
           </div>
-          <div className="cookie-editor__editor border-top">
+          <div className="cookie-list__list border-top">
             <div className="pad-top">
-              <CookiesEditor
+              <CookieList
+                handleShowModifyCookieModal={handleShowModifyCookieModal}
+                handleRender={handleRender}
                 cookies={filteredCookies}
-                onCookieUpdate={this._handleCookieUpdate}
                 onCookieAdd={this._handleCookieAdd}
                 onCookieDelete={this._handleCookieDelete}
                 // Set the domain to the filter so that it shows up if we're filtering
@@ -160,10 +149,6 @@ class CookiesModal extends PureComponent {
     );
   }
 }
-
-CookiesModal.propTypes = {
-  workspace: PropTypes.object.isRequired
-};
 
 // export CookiesModal;
 export default CookiesModal;

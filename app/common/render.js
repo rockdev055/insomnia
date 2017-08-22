@@ -7,23 +7,14 @@ import * as models from '../models';
 import {setDefaultProtocol} from './misc';
 import * as db from './database';
 import * as templating from '../templating';
+import type {CookieJar} from '../models/cookie-jar';
 
 export const KEEP_ON_ERROR = 'keep';
 export const THROW_ON_ERROR = 'throw';
 
-type Cookie = {
-  domain: string,
-  path: string,
-  key: string,
-  value: string,
-  expires: number
-}
-
 export type RenderedRequest = Request & {
   cookies: Array<{name: string, value: string, disabled?: boolean}>,
-  cookieJar: {
-    cookies: Array<Cookie>
-  }
+  cookieJar: CookieJar
 };
 
 export async function buildRenderContext (
@@ -227,7 +218,8 @@ export async function getRenderedRequest (
     models.workspace.type
   ]);
   const workspace = ancestors.find(doc => doc.type === models.workspace.type);
-  const cookieJar = await models.cookieJar.getOrCreateForWorkspace(workspace);
+  const parentId = workspace ? workspace._id : 'n/a';
+  const cookieJar = await models.cookieJar.getOrCreateForParentId(parentId);
 
   const renderContext = await getRenderContext(request, environmentId, ancestors);
 
@@ -236,6 +228,12 @@ export async function getRenderedRequest (
     request,
     renderContext,
     request.settingDisableRenderRequestBody ? /^body.*/ : null
+  );
+
+  // Render cookies
+  const renderedCookieJar = await render(
+    cookieJar,
+    renderContext
   );
 
   // Remove disabled params
@@ -260,7 +258,7 @@ export async function getRenderedRequest (
   return {
     // Add the yummy cookies
     // TODO: Eventually get rid of RenderedRequest type and put these elsewhere
-    cookieJar,
+    cookieJar: renderedCookieJar,
     cookies: [],
 
     // NOTE: Flow doesn't like Object.assign, so we have to do each property manually
