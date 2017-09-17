@@ -1,6 +1,5 @@
 import PromptModal from './prompt-modal';
 import AlertModal from './alert-modal';
-import ErrorModal from './error-modal';
 
 const modals = {};
 
@@ -18,10 +17,6 @@ export function showPrompt (config) {
 
 export function showAlert (config) {
   showModal(AlertModal, config);
-}
-
-export function showError (config) {
-  showModal(ErrorModal, config);
 }
 
 export function showModal (modalCls, ...args) {

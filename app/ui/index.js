@@ -19,6 +19,7 @@ import {isDevelopment} from '../common/constants';
 (async function () {
   await initDB(modelTypes());
   await initAnalytics(getAccountId());
+  await initPlugins();
 
   // Create Redux store
   const store = await initStore();
@@ -47,7 +48,6 @@ import {isDevelopment} from '../common/constants';
 
   // Do things that can wait
   process.nextTick(initSync);
-  process.nextTick(initPlugins);
 })();
 
 // Export some useful things for dev
