@@ -321,19 +321,7 @@ export function escapeRegex (str: string): string {
 }
 
 export function fuzzyMatch (searchString: string, text: string): boolean {
-  const lowercase = searchString.toLowerCase();
-
-  // Split into individual chars, then escape the ones that need it.
-  const regexSearchString = lowercase.split('').map(v => escapeRegex(v)).join('.*');
-
-  let toMatch;
-  try {
-    toMatch = new RegExp(regexSearchString);
-  } catch (err) {
-    console.warn('Invalid regex', searchString, regexSearchString);
-    // Invalid regex somehow
-    return false;
-  }
-
+  const regexSearchString = escapeRegex(searchString.toLowerCase()).split('').join('.*');
+  const toMatch = new RegExp(regexSearchString);
   return toMatch.test(text.toLowerCase());
 }

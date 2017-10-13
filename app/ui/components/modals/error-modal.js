@@ -35,6 +35,8 @@ class ErrorModal extends PureComponent {
     const {title, error, addCancel, message} = options;
     this.setState({title, error, addCancel, message});
 
+    console.warn(`Error: ${message || ''}`, error.stack);
+
     this.modal.show();
 
     return new Promise(resolve => {
@@ -49,11 +51,9 @@ class ErrorModal extends PureComponent {
       <Modal ref={this._setModalRef} closeOnKeyCodes={[13]}>
         <ModalHeader>{title || 'Uh Oh!'}</ModalHeader>
         <ModalBody className="wide pad">
-          {message ? (
-            <div className="notice error">{message}</div>
-          ) : null}
+          <strong>{message && message}</strong>
           {error && (
-            <pre className="pad-top-sm force-wrap selectable">
+            <pre className="pad-top-sm force-wrap">
               <code>{error.stack}</code>
             </pre>
           )}
