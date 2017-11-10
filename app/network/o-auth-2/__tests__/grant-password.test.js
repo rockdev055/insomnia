@@ -1,6 +1,5 @@
 import getToken from '../grant-password';
 import {globalBeforeEach} from '../../../__jest__/before-each';
-import * as network from '../../network';
 
 // Mock some test things
 const ACCESS_TOKEN_URL = 'https://foo.com/access_token';
@@ -13,19 +12,12 @@ const SCOPE = 'scope_123';
 describe('password', () => {
   beforeEach(globalBeforeEach);
   it('gets token with JSON and basic auth', async () => {
-    network.sendWithSettings = jest.fn(() => ({
-      bodyBuffer: Buffer.from(JSON.stringify({
-        access_token: 'token_123',
-        token_type: 'token_type',
-        scope: SCOPE
-      })),
-      response: {
-        headers: [{name: 'Content-Type', value: 'application/json'}]
-      }
-    }));
+    window.fetch = jest.fn(() => new window.Response(
+      JSON.stringify({access_token: 'token_123', token_type: 'token_type', scope: SCOPE}),
+      {headers: {'Content-Type': 'application/json'}}
+    ));
 
     const result = await getToken(
-      'req_1',
       ACCESS_TOKEN_URL,
       false,
       CLIENT_ID,
@@ -36,23 +28,19 @@ describe('password', () => {
     );
 
     // Check the request to fetch the token
-    expect(network.sendWithSettings.mock.calls).toEqual([['req_1', {
-      url: ACCESS_TOKEN_URL,
+    expect(window.fetch.mock.calls).toEqual([[ACCESS_TOKEN_URL, {
+      body: [
+        'grant_type=password',
+        `username=${USERNAME}`,
+        `password=${PASSWORD}`,
+        `scope=${SCOPE}`
+      ].join('&'),
       method: 'POST',
-      body: {
-        mimeType: 'application/x-www-form-urlencoded',
-        params: [
-          {name: 'grant_type', value: 'password', disabled: false},
-          {name: 'username', value: USERNAME, disabled: false},
-          {name: 'password', value: PASSWORD, disabled: false},
-          {name: 'scope', value: SCOPE, disabled: false}
-        ]
-      },
-      headers: [
-        {name: 'Content-Type', value: 'application/x-www-form-urlencoded'},
-        {name: 'Accept', value: 'application/x-www-form-urlencoded, application/json'},
-        {name: 'Authorization', value: 'Basic Y2xpZW50XzEyMzpzZWNyZXRfMTIzNDU0NTY2Nzc3NTYzNDM='}
-      ]
+      headers: {
+        'Accept': 'application/x-www-form-urlencoded, application/json',
+        'Authorization': 'Basic Y2xpZW50XzEyMzpzZWNyZXRfMTIzNDU0NTY2Nzc3NTYzNDM=',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     }]]);
 
     // Check the expected value
@@ -69,19 +57,12 @@ describe('password', () => {
   });
 
   it('gets token with urlencoded and body auth', async () => {
-    network.sendWithSettings = jest.fn(() => ({
-      bodyBuffer: Buffer.from(JSON.stringify({
-        access_token: 'token_123',
-        token_type: 'token_type',
-        scope: SCOPE
-      })),
-      response: {
-        headers: [{name: 'Content-Type', value: 'application/x-www-form-urlencoded'}]
-      }
-    }));
+    window.fetch = jest.fn(() => new window.Response(
+      `access_token=token_123&token_type=token_type&scope=${SCOPE}`,
+      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+    ));
 
     const result = await getToken(
-      'req_1',
       ACCESS_TOKEN_URL,
       true,
       CLIENT_ID,
@@ -92,24 +73,20 @@ describe('password', () => {
     );
 
     // Check the request to fetch the token
-    expect(network.sendWithSettings.mock.calls).toEqual([['req_1', {
-      url: ACCESS_TOKEN_URL,
+    expect(window.fetch.mock.calls).toEqual([[ACCESS_TOKEN_URL, {
+      body: [
+        'grant_type=password',
+        `username=${USERNAME}`,
+        `password=${PASSWORD}`,
+        `scope=${SCOPE}`,
+        `client_id=${CLIENT_ID}`,
+        `client_secret=${CLIENT_SECRET}`
+      ].join('&'),
       method: 'POST',
-      body: {
-        mimeType: 'application/x-www-form-urlencoded',
-        params: [
-          {name: 'grant_type', value: 'password', disabled: false},
-          {name: 'username', value: USERNAME, disabled: false},
-          {name: 'password', value: PASSWORD, disabled: false},
-          {name: 'scope', value: SCOPE, disabled: false},
-          {name: 'client_id', value: CLIENT_ID, disabled: false},
-          {name: 'client_secret', value: CLIENT_SECRET, disabled: false}
-        ]
-      },
-      headers: [
-        {name: 'Content-Type', value: 'application/x-www-form-urlencoded'},
-        {name: 'Accept', value: 'application/x-www-form-urlencoded, application/json'}
-      ]
+      headers: {
+        'Accept': 'application/x-www-form-urlencoded, application/json',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     }]]);
 
     // Check the expected value

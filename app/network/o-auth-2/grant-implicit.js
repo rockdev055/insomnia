@@ -1,16 +1,8 @@
-// @flow
 import * as querystring from '../../common/querystring';
 import * as c from './constants';
 import {responseToObject, authorizeUserInWindow} from './misc';
 
-export default async function (
-  requestId: string,
-  authorizationUrl: string,
-  clientId: string,
-  redirectUri: string = '',
-  scope: string = '',
-  state: string = ''
-): Promise<Object> {
+export default async function (authorizationUrl, clientId, redirectUri = '', scope = '', state = '') {
   const params = [
     {name: c.P_RESPONSE_TYPE, value: c.RESPONSE_TYPE_TOKEN},
     {name: c.P_CLIENT_ID, value: clientId}

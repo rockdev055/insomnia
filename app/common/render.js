@@ -187,17 +187,12 @@ export async function getRenderContext (
 
   if (!ancestors) {
     ancestors = await db.withAncestors(request, [
-      models.request.type,
       models.requestGroup.type,
       models.workspace.type
     ]);
   }
 
   const workspace = ancestors.find(doc => doc.type === models.workspace.type);
-  if (!workspace) {
-    throw new Error('Failed to render. Could not find workspace');
-  }
-
   const rootEnvironment = await models.environment.getOrCreateForWorkspaceId(workspace ? workspace._id : 'n/a');
   const subEnvironment = await models.environment.getById(environmentId);
 
@@ -224,7 +219,6 @@ export async function getRenderedRequest (
   environmentId: string
 ): Promise<RenderedRequest> {
   const ancestors = await db.withAncestors(request, [
-    models.request.type,
     models.requestGroup.type,
     models.workspace.type
   ]);
