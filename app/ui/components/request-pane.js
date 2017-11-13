@@ -316,7 +316,7 @@ class RequestPane extends React.PureComponent<Props> {
               </button>
             </Tab>
           </TabList>
-          <TabPanel className="react-tabs__tab-panel editor-wrapper">
+          <TabPanel key={uniqueKey} className="react-tabs__tab-panel editor-wrapper">
             <BodyEditor
               key={uniqueKey}
               handleUpdateRequestMimeType={updateRequestMimeType}
