@@ -29,7 +29,6 @@ export type ResponseTimelineEntry = {
 type BaseResponse = {
   statusCode: number,
   statusMessage: string,
-  httpVersion: string,
   contentType: string,
   url: string,
   bytesRead: number,
@@ -52,7 +51,6 @@ export function init (): BaseResponse {
   return {
     statusCode: 0,
     statusMessage: '',
-    httpVersion: '',
     contentType: '',
     url: '',
     bytesRead: 0,

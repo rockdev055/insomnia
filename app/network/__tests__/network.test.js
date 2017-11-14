@@ -7,7 +7,6 @@ import {AUTH_AWS_IAM, AUTH_BASIC, AUTH_NETRC, CONTENT_TYPE_FILE, CONTENT_TYPE_FO
 import {filterHeaders} from '../../common/misc';
 import {globalBeforeEach} from '../../__jest__/before-each';
 import {DEFAULT_BOUNDARY} from '../multipart';
-import {_parseHeaders} from '../network';
 
 describe('actuallySend()', () => {
   beforeEach(globalBeforeEach);
@@ -68,9 +67,6 @@ describe('actuallySend()', () => {
     const body = JSON.parse(bodyBuffer);
     expect(body).toEqual({
       meta: {},
-      features: {
-        NO_HEADER_PARSING: true
-      },
       options: {
         COOKIELIST: [
           'notlocalhost\tFALSE\t/\tFALSE\t4000855249\tfoo\tbarrrrr',
@@ -129,9 +125,6 @@ describe('actuallySend()', () => {
     const body = JSON.parse(bodyBuffer);
     expect(body).toEqual({
       meta: {},
-      features: {
-        NO_HEADER_PARSING: true
-      },
       options: {
         POST: 1,
         ACCEPT_ENCODING: '',
@@ -213,9 +206,6 @@ describe('actuallySend()', () => {
     const body = JSON.parse(bodyBuffer);
     expect(body).toEqual({
       meta: {},
-      features: {
-        NO_HEADER_PARSING: true
-      },
       options: {
         CUSTOMREQUEST: 'GET',
         ACCEPT_ENCODING: '',
@@ -266,9 +256,6 @@ describe('actuallySend()', () => {
 
     expect(body).toEqual({
       meta: {},
-      features: {
-        NO_HEADER_PARSING: true
-      },
       options: {
         POST: 1,
         ACCEPT_ENCODING: '',
@@ -382,9 +369,6 @@ describe('actuallySend()', () => {
     const body = JSON.parse(bodyBuffer);
     expect(body).toEqual({
       meta: {},
-      features: {
-        NO_HEADER_PARSING: true
-      },
       options: {
         CUSTOMREQUEST: 'GET',
         ACCEPT_ENCODING: '',
@@ -423,9 +407,6 @@ describe('actuallySend()', () => {
     const body = JSON.parse(bodyBuffer);
     expect(body).toEqual({
       meta: {},
-      features: {
-        NO_HEADER_PARSING: true
-      },
       options: {
         NOBODY: 1,
         ACCEPT_ENCODING: '',
@@ -463,9 +444,6 @@ describe('actuallySend()', () => {
     const body = JSON.parse(bodyBuffer);
     expect(body).toEqual({
       meta: {},
-      features: {
-        NO_HEADER_PARSING: true
-      },
       options: {
         CUSTOMREQUEST: 'GET',
         ACCEPT_ENCODING: '',
@@ -504,9 +482,6 @@ describe('actuallySend()', () => {
     const body = JSON.parse(bodyBuffer);
     expect(body).toEqual({
       meta: {},
-      features: {
-        NO_HEADER_PARSING: true
-      },
       options: {
         CUSTOMREQUEST: 'GET',
         ACCEPT_ENCODING: '',
@@ -591,96 +566,5 @@ describe('_getAwsAuthHeaders', () => {
       .toMatch(/^AWS4-HMAC-SHA256 Credential=AKIA99999999/);
     expect(filterHeaders(headers, 'content-type'))
       .toHaveLength(0);
-  });
-});
-
-describe('_parseHeaders', () => {
-  const basicHeaders = [
-    'HTTP/1.1 301 Moved Permanently',
-    'X-Powered-By: Express',
-    'location: http://localhost:3000/',
-    'Content-Type: text/plain; charset=utf-8',
-    'Content-Length: 17',
-    'ETag: W/"11-WKzg6oYof0o8Mliwrz5pkw"',
-    'Duplicate: foo',
-    'Duplicate: bar',
-    'Date: Mon, 13 Nov 2017 22:06:28 GMT',
-    'Foo', // Invalid header
-    ''
-  ];
-
-  const minimalHeaders = [
-    'HTTP/1.1 301',
-    ''
-  ];
-
-  it('Parses single response headers', () => {
-    expect(_parseHeaders(new Buffer(basicHeaders.join('\n')))).toEqual([
-      {
-        code: 301,
-        version: 'HTTP/1.1',
-        reason: 'Moved Permanently',
-        headers: [
-          {name: 'X-Powered-By', value: 'Express'},
-          {name: 'location', value: 'http://localhost:3000/'},
-          {name: 'Content-Type', value: 'text/plain; charset=utf-8'},
-          {name: 'Content-Length', value: '17'},
-          {name: 'ETag', value: 'W/"11-WKzg6oYof0o8Mliwrz5pkw"'},
-          {name: 'Duplicate', value: 'foo'},
-          {name: 'Duplicate', value: 'bar'},
-          {name: 'Date', value: 'Mon, 13 Nov 2017 22:06:28 GMT'},
-          {name: 'Foo', value: ''}
-        ]
-      }
-    ]);
-  });
-
-  it('Parses Windows newlines', () => {
-    expect(_parseHeaders(new Buffer(basicHeaders.join('\r\n')))).toEqual([
-      {
-        code: 301,
-        version: 'HTTP/1.1',
-        reason: 'Moved Permanently',
-        headers: [
-          {name: 'X-Powered-By', value: 'Express'},
-          {name: 'location', value: 'http://localhost:3000/'},
-          {name: 'Content-Type', value: 'text/plain; charset=utf-8'},
-          {name: 'Content-Length', value: '17'},
-          {name: 'ETag', value: 'W/"11-WKzg6oYof0o8Mliwrz5pkw"'},
-          {name: 'Duplicate', value: 'foo'},
-          {name: 'Duplicate', value: 'bar'},
-          {name: 'Date', value: 'Mon, 13 Nov 2017 22:06:28 GMT'},
-          {name: 'Foo', value: ''}
-        ]
-      }
-    ]);
-  });
-
-  it('Parses multiple responses', () => {
-    const blobs = basicHeaders.join('\r\n') + '\n' + minimalHeaders.join('\n');
-    expect(_parseHeaders(new Buffer(blobs))).toEqual([
-      {
-        code: 301,
-        version: 'HTTP/1.1',
-        reason: 'Moved Permanently',
-        headers: [
-          {name: 'X-Powered-By', value: 'Express'},
-          {name: 'location', value: 'http://localhost:3000/'},
-          {name: 'Content-Type', value: 'text/plain; charset=utf-8'},
-          {name: 'Content-Length', value: '17'},
-          {name: 'ETag', value: 'W/"11-WKzg6oYof0o8Mliwrz5pkw"'},
-          {name: 'Duplicate', value: 'foo'},
-          {name: 'Duplicate', value: 'bar'},
-          {name: 'Date', value: 'Mon, 13 Nov 2017 22:06:28 GMT'},
-          {name: 'Foo', value: ''}
-        ]
-      },
-      {
-        code: 301,
-        headers: [],
-        reason: '',
-        version: 'HTTP/1.1'
-      }
-    ]);
   });
 });

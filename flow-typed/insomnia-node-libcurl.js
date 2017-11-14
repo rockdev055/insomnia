@@ -1,8 +1,5 @@
 declare class Curl {
-  static getVersion: () => string;
-  static feature: {
-    NO_HEADER_PARSING: number
-  };
+  static getVersion: () => string,
   static option: {
     ACCEPT_ENCODING: number,
     CAINFO: number,
@@ -73,7 +70,6 @@ declare class Curl {
   };
 
   setOpt: (option: number, ...args: Array<any>) => void;
-  enable: (option: number, ...args: Array<any>) => void;
   getInfo: (option: string, ...args: Array<any>) => any;
   perform: () => void;
   close: () => void;
