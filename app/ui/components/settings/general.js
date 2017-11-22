@@ -106,6 +106,7 @@ class General extends React.PureComponent<Props> {
           <label className="inline-block">
             Disable Usage Tracking
             {' '}
+            <HelpTooltip>Requires restart to take effect</HelpTooltip>
             <input type="checkbox"
                    name="disableAnalyticsTracking"
                    checked={settings.disableAnalyticsTracking}

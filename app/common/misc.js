@@ -267,20 +267,16 @@ export function preventDefault (e: Event): void {
   e.preventDefault();
 }
 
-export function attributeHref (href: string): string {
+export function clickLink (href: string): void {
   if (href.match(/^http/i)) {
     const appName = isDevelopment() ? 'Insomnia Dev' : 'Insomnia';
     const qs = `utm_source=${appName}&utm_medium=app&utm_campaign=v${getAppVersion()}`;
-    return querystring.joinUrl(href, qs);
+    const attributedHref = querystring.joinUrl(href, qs);
+    electron.shell.openExternal(attributedHref);
   } else {
     // Don't modify non-http urls
-    return href;
+    electron.shell.openExternal(href);
   }
-}
-
-export function clickLink (href: string): void {
-  const attributedHref = attributeHref(href);
-  electron.shell.openExternal(attributedHref);
 }
 
 export function fnOrString (v: string | Function, ...args: Array<any>) {

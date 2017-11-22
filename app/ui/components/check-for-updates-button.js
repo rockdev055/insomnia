@@ -25,14 +25,16 @@ class CheckForUpdatesButton extends React.PureComponent<Props, State> {
     };
   }
 
-  _listenerCheckComplete (e: any, updateAvailable: true, status: string) {
-    this.setState({status, updateAvailable});
-  }
+  componentDidMount () {
+    electron.ipcRenderer.on('updater.check.status', (e, status) => {
+      if (this.state.checking) {
+        this.setState({status});
+      }
+    });
 
-  _listenerCheckStatus (e: any, status: string) {
-    if (this.state.checking) {
-      this.setState({status});
-    }
+    electron.ipcRenderer.on('updater.check.complete', (e, updateAvailable, status) => {
+      this.setState({checking: false, status, updateAvailable});
+    });
   }
 
   _handleCheckForUpdates () {
@@ -40,35 +42,13 @@ class CheckForUpdatesButton extends React.PureComponent<Props, State> {
     this.setState({checking: true});
   }
 
-  componentDidMount () {
-    electron.ipcRenderer.on('updater.check.status', this._listenerCheckStatus);
-    electron.ipcRenderer.on('updater.check.complete', this._listenerCheckComplete);
-  }
-
-  componentWillUnmount () {
-    electron.ipcRenderer.removeListener('updater.check.complete', this._listenerCheckComplete);
-    electron.ipcRenderer.removeListener('updater.check.status', this._listenerCheckStatus);
-  }
-
   render () {
     const {children, className} = this.props;
-    const {status, checking, updateAvailable} = this.state;
-
-    let toShow = children;
-
-    if (checking) {
-      toShow = status || children;
-    }
-
-    if (updateAvailable) {
-      toShow = status;
-    }
+    const {status, checking} = this.state;
 
     return (
-      <button className={className}
-              disabled={status || updateAvailable}
-              onClick={this._handleCheckForUpdates}>
-        {toShow}
+      <button className={className} disabled={checking} onClick={this._handleCheckForUpdates}>
+        {status || children}
       </button>
     );
   }
