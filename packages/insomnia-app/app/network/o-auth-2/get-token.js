@@ -72,8 +72,7 @@ async function _getOAuth2ClientCredentialsHeader (
     authentication.credentialsInBody,
     authentication.clientId,
     authentication.clientSecret,
-    authentication.scope,
-    authentication.audience
+    authentication.scope
   );
 
   return _updateOAuth2Token(requestId, results);
