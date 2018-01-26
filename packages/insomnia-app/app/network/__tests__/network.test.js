@@ -558,21 +558,16 @@ describe('_getAwsAuthHeaders', () => {
       authentication: {
         type: AUTH_AWS_IAM,
         accessKeyId: 'AKIA99999999',
-        secretAccessKey: 'SAK9999999999999',
-        sessionToken: 'ST9999999999999999'
+        secretAccessKey: 'SAK9999999999999'
       },
       headers: [{name: 'content-type', value: 'application/json'}],
       body: {text: '{}'},
       method: 'POST',
       url: 'https://example.com/path?query=q1'
     };
-    const credentials = {
-      accessKeyId: req.authentication.accessKeyId || '',
-      secretAccessKey: req.authentication.secretAccessKey || '',
-      sessionToken: req.authentication.sessionToken || ''
-    };
     const headers = networkUtils._getAwsAuthHeaders(
-      credentials,
+      req.authentication.accessKeyId,
+      req.authentication.secretAccessKey,
       req.headers,
       req.body.text,
       req.url,
@@ -592,8 +587,7 @@ describe('_getAwsAuthHeaders', () => {
       authentication: {
         type: AUTH_AWS_IAM,
         accessKeyId: 'AKIA99999999',
-        secretAccessKey: 'SAK9999999999999',
-        sessionToken: 'ST99999999999999'
+        secretAccessKey: 'SAK9999999999999'
       },
       headers: [
         'Accept: */*',
@@ -602,13 +596,10 @@ describe('_getAwsAuthHeaders', () => {
       url: 'https://example.com',
       method: 'GET'
     };
-    const credentials = {
-      accessKeyId: req.authentication.accessKeyId || '',
-      secretAccessKey: req.authentication.secretAccessKey || '',
-      sessionToken: req.authentication.sessionToken || ''
-    };
+
     const headers = networkUtils._getAwsAuthHeaders(
-      credentials,
+      req.authentication.accessKeyId,
+      req.authentication.secretAccessKey,
       req.headers,
       null,
       req.url,
