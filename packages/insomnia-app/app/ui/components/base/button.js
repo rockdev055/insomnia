@@ -21,13 +21,11 @@ class Button extends PureComponent {
       disabled,
       tabIndex,
       className,
-      type,
-      id
+      type
     } = this.props;
 
     return (
       <button disabled={disabled}
-              id={id}
               type={type}
               tabIndex={tabIndex}
               className={className}
@@ -49,8 +47,7 @@ Button.propTypes = {
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
   tabIndex: PropTypes.number,
-  type: PropTypes.string,
-  id: PropTypes.string
+  type: PropTypes.string
 };
 
 export default Button;
