@@ -40,9 +40,10 @@ class ContentTypeDropdown extends React.PureComponent<Props> {
 
     const willBeFile = mimeType === CONTENT_TYPE_FILE;
     const willBeMultipart = mimeType === CONTENT_TYPE_FORM_DATA;
+    const willBeEmpty = typeof mimeType !== 'string';
     const willBeGraphQL = mimeType === CONTENT_TYPE_GRAPHQL;
 
-    const willConvertToText = !willBeGraphQL && !willBeFile && !willBeMultipart;
+    const willConvertToText = !willBeGraphQL && !willBeFile && !willBeMultipart && !willBeEmpty;
     const willPreserveText = willConvertToText && isText;
     const willPreserveForm = isFormUrlEncoded && willBeMultipart;
 

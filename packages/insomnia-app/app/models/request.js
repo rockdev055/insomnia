@@ -243,8 +243,7 @@ export function update (request: Request, patch: Object): Promise<Request> {
 export function updateMimeType (
   request: Request,
   mimeType: string,
-  doCreate: boolean = false,
-  savedBody: RequestBody = {}
+  doCreate: boolean = false
 ): Promise<Request> {
   let headers = request.headers ? [...request.headers] : [];
   const contentTypeHeader = getContentTypeHeader(headers);
@@ -289,20 +288,16 @@ export function updateMimeType (
 
   let body;
 
-  const oldBody = Object.keys(savedBody).length === 0
-    ? request.body
-    : savedBody;
-
   if (mimeType === CONTENT_TYPE_FORM_URLENCODED) {
     // Urlencoded
-    body = oldBody.params
-      ? newBodyFormUrlEncoded(oldBody.params)
-      : newBodyFormUrlEncoded(deconstructQueryStringToParams(oldBody.text));
+    body = request.body.params
+      ? newBodyFormUrlEncoded(request.body.params)
+      : newBodyFormUrlEncoded(deconstructQueryStringToParams(request.body.text));
   } else if (mimeType === CONTENT_TYPE_FORM_DATA) {
     // Form Data
-    body = oldBody.params
-      ? newBodyForm(oldBody.params)
-      : newBodyForm(deconstructQueryStringToParams(oldBody.text));
+    body = request.body.params
+      ? newBodyForm(request.body.params)
+      : newBodyForm(deconstructQueryStringToParams(request.body.text));
   } else if (mimeType === CONTENT_TYPE_FILE) {
     // File
     body = newBodyFile('');
@@ -310,15 +305,15 @@ export function updateMimeType (
     if (contentTypeHeader) {
       contentTypeHeader.value = CONTENT_TYPE_JSON;
     }
-    body = newBodyRaw(oldBody.text || '', CONTENT_TYPE_GRAPHQL);
+    body = newBodyRaw(request.body.text || '', CONTENT_TYPE_GRAPHQL);
   } else if (typeof mimeType !== 'string') {
     // No body
     body = newBodyNone();
   } else {
     // Raw Content-Type (ex: application/json)
-    body = oldBody.params
-      ? newBodyRaw(buildQueryStringFromParams(oldBody.params, false), mimeType)
-      : newBodyRaw(oldBody.text || '', mimeType);
+    body = request.body.params
+      ? newBodyRaw(buildQueryStringFromParams(request.body.params, false), mimeType)
+      : newBodyRaw(request.body.text || '', mimeType);
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~ //
