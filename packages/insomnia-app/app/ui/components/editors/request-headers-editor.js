@@ -118,7 +118,7 @@ class RequestHeadersEditor extends PureComponent {
           <div className="scrollable">
             <KeyValueEditor
               sortable
-              namePlaceholder="Header"
+              namePlaceholder="My-Header"
               valuePlaceholder="Value"
               pairs={headers}
               nunjucksPowerUserMode={nunjucksPowerUserMode}
