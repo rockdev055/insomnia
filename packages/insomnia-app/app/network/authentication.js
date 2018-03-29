@@ -34,7 +34,15 @@ export async function getAuthHeader (
   }
 
   if (authentication.type === AUTH_OAUTH_2) {
-    const oAuth2Token = await getOAuth2Token(requestId, authentication);
+    // HACK: GraphQL requests use a child request to fetch the schema with an
+    // ID of "{{request_id}}.graphql". Here we are removing the .graphql suffix and
+    // pretending we are fetching a token for the original request. This makes sure
+    // the same tokens are used for schema fetching. See issue #835 on GitHub.
+    const tokenId = requestId.match(/\.graphql$/)
+      ? requestId.replace(/\.graphql$/, '')
+      : requestId;
+
+    const oAuth2Token = await getOAuth2Token(tokenId, authentication);
     if (oAuth2Token) {
       const token = oAuth2Token.accessToken;
       return _buildBearerHeader(token, authentication.tokenPrefix);
@@ -65,27 +73,10 @@ export async function getAuthHeader (
   }
 
   if (authentication.type === AUTH_ASAP) {
-    const {issuer, subject, audience, keyId, additionalClaims, privateKey} = authentication;
+    const {issuer, subject, audience, keyId, privateKey} = authentication;
 
     const generator = jwtAuthentication.client.create();
-    let claims = {iss: issuer, sub: subject, aud: audience};
-
-    let parsedAdditionalClaims;
-
-    try {
-      parsedAdditionalClaims = JSON.parse(additionalClaims);
-    } catch (err) {
-      throw new Error(`Unable to parse additional-claims: ${err}`);
-    }
-
-    if (parsedAdditionalClaims) {
-      if (typeof parsedAdditionalClaims !== 'object') {
-        throw new Error(`additional-claims must be an object recieved: '${typeof parsedAdditionalClaims}' instead`);
-      }
-
-      claims = Object.assign(parsedAdditionalClaims, claims);
-    }
-
+    const claims = {iss: issuer, sub: subject, aud: audience};
     const options = {
       privateKey,
       kid: keyId
