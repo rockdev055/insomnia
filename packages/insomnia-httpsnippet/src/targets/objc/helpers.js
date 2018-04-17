@@ -4,7 +4,7 @@ var util = require('util')
 
 module.exports = {
   /**
-   * Create a string of given length filled with blank spaces
+   * Create an string of given length filled with blank spaces
    *
    * @param {number} length Length of the array to return
    * @return {string}

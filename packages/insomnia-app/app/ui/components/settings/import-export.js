@@ -30,7 +30,7 @@ class ImportExport extends PureComponent {
       <div>
         <p className="no-margin-top">
           Import format will be automatically detected (<strong>Insomnia, Postman v2, HAR,
-          Curl, Swagger</strong>)
+          Curl</strong>)
         </p>
         <p>
           Don't see your format here?
