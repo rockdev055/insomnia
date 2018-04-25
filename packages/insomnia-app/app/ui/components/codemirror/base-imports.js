@@ -42,8 +42,6 @@ import 'codemirror-graphql/lint';
 import 'codemirror-graphql/mode';
 import 'codemirror-graphql/info';
 import 'codemirror-graphql/jump';
-import 'codemirror-graphql/variables/lint';
-import 'codemirror-graphql/variables/mode';
 import './modes/nunjucks';
 import './modes/curl';
 import './extensions/autocomplete';
