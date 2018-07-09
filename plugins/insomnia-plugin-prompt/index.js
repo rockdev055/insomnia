@@ -38,23 +38,9 @@ module.exports.templateTags = [
           'If this is set, the value will be stored in memory under this key until the app is ' +
           "closed. To force this tag to re-prompt the user, simply change this key's value to " +
           'something else.'
-      },
-      {
-        displayName: 'Mask Text',
-        type: 'boolean',
-        help:
-          'If this is enabled, the value when input will be masked like a password field.',
-        defaultValue: false
       }
     ],
-    async run(
-      context,
-      title,
-      label,
-      defaultValue,
-      explicitStorageKey,
-      maskText
-    ) {
+    async run(context, title, label, defaultValue, explicitStorageKey) {
       if (!title) {
         throw new Error('Title attribute is required for prompt tag');
       }
@@ -74,8 +60,7 @@ module.exports.templateTags = [
 
       const value = await context.app.prompt(title || 'Enter Value', {
         label,
-        defaultValue,
-        inputType: maskText ? 'password' : 'text'
+        defaultValue
       });
 
       if (storageKey) {
