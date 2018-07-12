@@ -25,8 +25,7 @@ type BaseSettings = {
   nunjucksPowerUserMode: boolean,
   deviceId: string | null,
   updateChannel: string,
-  updateAutomatically: boolean,
-  environmentHighlightColorStyle: string
+  updateAutomatically: boolean
 };
 
 export type Settings = BaseModel & BaseSettings;
@@ -59,8 +58,7 @@ export function init(): BaseSettings {
     nunjucksPowerUserMode: false,
     deviceId: null,
     updateChannel: UPDATE_CHANNEL_STABLE,
-    updateAutomatically: true,
-    environmentHighlightColorStyle: 'dot'
+    updateAutomatically: true
   };
 }
 

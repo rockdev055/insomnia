@@ -21,7 +21,6 @@ type Props = {
   handleChangeEnvironment: Function,
   workspace: Workspace,
   environments: Array<Environment>,
-  environmentHighlightColorStyle: String,
 
   // Optional
   className?: string,
@@ -68,7 +67,6 @@ class EnvironmentsDropdown extends React.PureComponent<Props> {
       workspace,
       environments,
       activeEnvironment,
-      environmentHighlightColorStyle,
       ...other
     } = this.props;
 
@@ -102,9 +100,7 @@ class EnvironmentsDropdown extends React.PureComponent<Props> {
                   </Tooltip>
                 )}
               <div className="sidebar__menu__thing__text">
-                {activeEnvironment &&
-                activeEnvironment.color &&
-                environmentHighlightColorStyle === 'dot' ? (
+                {activeEnvironment && activeEnvironment.color ? (
                   <i
                     className="fa fa-circle space-right"
                     style={{ color: activeEnvironment.color }}

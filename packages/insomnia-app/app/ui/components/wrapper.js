@@ -577,16 +577,7 @@ class Wrapper extends React.PureComponent<Props, State> {
         className={classnames('wrapper', {
           'wrapper--vertical': settings.forceVerticalLayout
         })}
-        style={{
-          gridTemplateColumns: columns,
-          gridTemplateRows: rows,
-          borderTop:
-            activeEnvironment &&
-            activeEnvironment.color &&
-            settings.environmentHighlightColorStyle === 'bar'
-              ? '5px solid ' + activeEnvironment.color
-              : null
-        }}>
+        style={{ gridTemplateColumns: columns, gridTemplateRows: rows }}>
         <ErrorBoundary showAlert>
           <Sidebar
             ref={handleSetSidebarRef}
@@ -618,9 +609,6 @@ class Wrapper extends React.PureComponent<Props, State> {
             isLoading={isLoading}
             workspaces={workspaces}
             environments={environments}
-            environmentHighlightColorStyle={
-              settings.environmentHighlightColorStyle
-            }
           />
         </ErrorBoundary>
 
