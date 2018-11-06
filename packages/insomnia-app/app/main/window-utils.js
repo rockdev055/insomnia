@@ -236,7 +236,7 @@ export function createWindow() {
       {
         label: 'Show App Data Folder',
         click: (menuItem, window, e) => {
-          const directory = misc.getDataDirectory();
+          const directory = app.getPath('userData');
           shell.showItemInFolder(directory);
         }
       },
@@ -413,7 +413,7 @@ function getZoomFactor() {
 }
 
 function initLocalStorage() {
-  const localStoragePath = path.join(misc.getDataDirectory(), 'localStorage');
+  const localStoragePath = path.join(app.getPath('userData'), 'localStorage');
   localStorage = new LocalStorage(localStoragePath);
 }
 
