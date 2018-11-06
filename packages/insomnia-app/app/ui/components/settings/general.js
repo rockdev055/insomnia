@@ -458,17 +458,6 @@ class General extends React.PureComponent<Props, State> {
                 />
               </label>
             </div>
-            <div className="form-control form-control--thin">
-              <label className="inline-block">
-                Disable update notification
-                <input
-                  type="checkbox"
-                  name="disableUpdateNotification"
-                  checked={settings.disableUpdateNotification}
-                  onChange={this._handleUpdateSetting}
-                />
-              </label>
-            </div>
             <div className="form-control form-control--outlined pad-top-sm">
               <label>
                 Update Channel
