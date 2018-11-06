@@ -367,12 +367,7 @@ class TagEditor extends React.PureComponent<Props, State> {
     return <input type="checkbox" checked={checked} onChange={this._handleChange} />;
   }
 
-  renderArgFile(
-    value: string,
-    itemTypes: Array<string>,
-    argIndex: number,
-    extensions?: Array<string>
-  ) {
+  renderArgFile(value: string, argIndex: number) {
     return (
       <FileInputButton
         showFileIcon
@@ -380,8 +375,6 @@ class TagEditor extends React.PureComponent<Props, State> {
         className="btn btn--clicky btn--super-compact"
         onChange={path => this._handleChangeFile(path, argIndex)}
         path={value}
-        itemtypes={itemTypes}
-        extensions={extensions}
       />
     );
   }
@@ -497,12 +490,7 @@ class TagEditor extends React.PureComponent<Props, State> {
       const { options } = argDefinition;
       argInput = this.renderArgEnum(strValue, options);
     } else if (argDefinition.type === 'file') {
-      argInput = this.renderArgFile(
-        strValue,
-        argDefinition.itemTypes,
-        argIndex,
-        argDefinition.extensions
-      );
+      argInput = this.renderArgFile(strValue, argIndex);
     } else if (argDefinition.type === 'model') {
       isVariableAllowed = false;
       const model = typeof argDefinition.model === 'string' ? argDefinition.model : 'unknown';
