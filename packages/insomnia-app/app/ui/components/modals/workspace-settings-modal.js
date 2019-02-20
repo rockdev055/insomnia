@@ -27,7 +27,6 @@ type Props = {
   handleGetRenderContext: Function,
   handleRemoveWorkspace: Function,
   handleDuplicateWorkspace: Function,
-  handleClearAllResponses: Function,
 };
 
 type State = {
@@ -76,11 +75,6 @@ class WorkspaceSettingsModal extends React.PureComponent<Props, State> {
 
   _handleRemoveWorkspace() {
     this.props.handleRemoveWorkspace();
-    this.hide();
-  }
-
-  _handleClearAllResponses() {
-    this.props.handleClearAllResponses();
     this.hide();
   }
 
@@ -337,12 +331,6 @@ class WorkspaceSettingsModal extends React.PureComponent<Props, State> {
                 className="width-auto btn btn--clicky inline-block space-left">
                 <i className="fa fa-copy" /> Duplicate
               </button>
-              <PromptButton
-                onClick={this._handleClearAllResponses}
-                addIcon
-                className="width-auto btn btn--clicky inline-block space-left">
-                <i className="fa fa-trash-o" /> Clear All Responses
-              </PromptButton>
             </div>
           </TabPanel>
           <TabPanel className="react-tabs__tab-panel pad scrollable">
