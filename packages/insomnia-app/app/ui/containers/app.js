@@ -58,7 +58,8 @@ import * as render from '../../common/render';
 import { getKeys } from '../../templating/utils';
 import { showAlert, showModal, showPrompt } from '../components/modals/index';
 import { exportHarRequest } from '../../common/har';
-import * as hotkeys from '../../common/hotkeys';
+import { hotKeyRefs } from '../../common/hotkeys';
+import { executeHotKey } from '../../common/hotkeys-listener';
 import KeydownBinder from '../components/keydown-binder';
 import ErrorBoundary from '../components/error-boundary';
 import * as plugins from '../../plugins';
@@ -67,7 +68,6 @@ import AskModal from '../components/modals/ask-modal';
 import { updateMimeType } from '../../models/request';
 import MoveRequestGroupModal from '../components/modals/move-request-group-modal';
 import * as themes from '../../plugins/misc';
-import ExportRequestsModal from '../components/modals/export-requests-modal';
 
 @autobind
 class App extends PureComponent {
@@ -101,20 +101,20 @@ class App extends PureComponent {
   _setGlobalKeyMap() {
     this._globalKeyMap = [
       [
-        hotkeys.SHOW_KEYBOARD_SHORTCUTS,
+        hotKeyRefs.PREFERENCES_SHOW_KEYBOARD_SHORTCUTS,
         () => {
           showModal(SettingsModal, TAB_INDEX_SHORTCUTS);
         },
       ],
       [
-        hotkeys.SHOW_WORKSPACE_SETTINGS,
+        hotKeyRefs.WORKSPACE_SHOW_SETTINGS,
         () => {
           const { activeWorkspace } = this.props;
           showModal(WorkspaceSettingsModal, activeWorkspace);
         },
       ],
       [
-        hotkeys.SHOW_REQUEST_SETTINGS,
+        hotKeyRefs.REQUEST_SHOW_SETTINGS,
         () => {
           if (this.props.activeRequest) {
             showModal(RequestSettingsModal, {
@@ -124,29 +124,28 @@ class App extends PureComponent {
         },
       ],
       [
-        hotkeys.SHOW_QUICK_SWITCHER,
+        hotKeyRefs.REQUEST_QUICK_SWITCH,
         () => {
           showModal(RequestSwitcherModal);
         },
       ],
-      [hotkeys.SEND_REQUEST, this._handleSendShortcut],
-      [hotkeys.SEND_REQUEST_F5, this._handleSendShortcut],
+      [hotKeyRefs.REQUEST_SEND, this._handleSendShortcut],
       [
-        hotkeys.SHOW_ENVIRONMENTS,
+        hotKeyRefs.ENVIRONMENT_SHOW_EDITOR,
         () => {
           const { activeWorkspace } = this.props;
           showModal(WorkspaceEnvironmentsEditModal, activeWorkspace);
         },
       ],
       [
-        hotkeys.SHOW_COOKIES,
+        hotKeyRefs.SHOW_COOKIES_EDITOR,
         () => {
           const { activeWorkspace } = this.props;
           showModal(CookiesModal, activeWorkspace);
         },
       ],
       [
-        hotkeys.CREATE_REQUEST,
+        hotKeyRefs.REQUEST_SHOW_CREATE,
         () => {
           const { activeRequest, activeWorkspace } = this.props;
           const parentId = activeRequest ? activeRequest.parentId : activeWorkspace._id;
@@ -154,7 +153,7 @@ class App extends PureComponent {
         },
       ],
       [
-        hotkeys.DELETE_REQUEST,
+        hotKeyRefs.REQUEST_SHOW_DELETE,
         () => {
           const { activeRequest } = this.props;
 
@@ -175,7 +174,7 @@ class App extends PureComponent {
         },
       ],
       [
-        hotkeys.CREATE_FOLDER,
+        hotKeyRefs.REQUEST_SHOW_CREATE_FOLDER,
         () => {
           const { activeRequest, activeWorkspace } = this.props;
           const parentId = activeRequest ? activeRequest.parentId : activeWorkspace._id;
@@ -183,19 +182,19 @@ class App extends PureComponent {
         },
       ],
       [
-        hotkeys.GENERATE_CODE,
+        hotKeyRefs.REQUEST_SHOW_GENERATE_CODE_EDITOR,
         async () => {
           showModal(GenerateCodeModal, this.props.activeRequest);
         },
       ],
       [
-        hotkeys.DUPLICATE_REQUEST,
+        hotKeyRefs.REQUEST_SHOW_DUPLICATE,
         async () => {
           await this._requestDuplicate(this.props.activeRequest);
         },
       ],
       [
-        hotkeys.UNCOVER_VARIABLES,
+        hotKeyRefs.ENVIRONMENT_UNCOVER_VARIABLES,
         async () => {
           await this._updateIsVariableUncovered();
         },
@@ -744,7 +743,7 @@ class App extends PureComponent {
 
   _handleKeyDown(e) {
     for (const [definition, callback] of this._globalKeyMap) {
-      hotkeys.executeHotKey(e, definition, callback);
+      executeHotKey(e, definition, callback);
     }
   }
 
@@ -760,10 +759,6 @@ class App extends PureComponent {
   async _handleToggleSidebar() {
     const sidebarHidden = !this.props.sidebarHidden;
     await this._handleSetSidebarHidden(sidebarHidden);
-  }
-
-  _handleShowExportRequestsModal() {
-    showModal(ExportRequestsModal);
   }
 
   _setWrapperRef(n) {
@@ -1019,7 +1014,6 @@ class App extends PureComponent {
               handleSetSidebarFilter={this._handleSetSidebarFilter}
               handleToggleMenuBar={this._handleToggleMenuBar}
               handleUpdateRequestMimeType={this._handleUpdateRequestMimeType}
-              handleShowExportRequestsModal={this._handleShowExportRequestsModal}
               isVariableUncovered={this.state.isVariableUncovered}
             />
           </ErrorBoundary>
@@ -1144,8 +1138,7 @@ function mapDispatchToProps(dispatch) {
     handleImportFileToWorkspace: global.importFile,
     handleImportUriToWorkspace: global.importUri,
     handleCommand: global.newCommand,
-    handleExportFile: global.exportWorkspacesToFile,
-    handleExportRequestsToFile: global.exportRequestsToFile,
+    handleExportFile: global.exportFile,
     handleMoveDoc: _moveDoc,
   };
 }

@@ -43,11 +43,6 @@ class SettingsModal extends PureComponent {
     this.modal.hide();
   }
 
-  _handleShowExportRequestsModal() {
-    this.props.handleShowExportRequestsModal();
-    this.modal.hide();
-  }
-
   _handleExportWorkspace() {
     this.props.handleExportWorkspaceToFile();
     this.modal.hide();
@@ -133,7 +128,6 @@ class SettingsModal extends PureComponent {
             <TabPanel className="react-tabs__tab-panel pad scrollable">
               <ImportExport
                 handleExportAll={this._handleExportAllToFile}
-                handleShowExportRequestsModal={this._handleShowExportRequestsModal}
                 handleExportWorkspace={this._handleExportWorkspace}
                 handleImportFile={this._handleImportFile}
                 handleImportUri={this._handleImportUri}
@@ -143,7 +137,7 @@ class SettingsModal extends PureComponent {
               <Theme handleChangeTheme={this._handleChangeTheme} activeTheme={settings.theme} />
             </TabPanel>
             <TabPanel className="react-tabs__tab-panel pad scrollable">
-              <SettingsShortcuts />
+              <SettingsShortcuts hotKeyRegistry={settings.hotKeyRegistry} />
             </TabPanel>
             <TabPanel className="react-tabs__tab-panel pad scrollable">
               <Account />
@@ -164,7 +158,6 @@ class SettingsModal extends PureComponent {
 SettingsModal.propTypes = {
   // Functions
   handleExportWorkspaceToFile: PropTypes.func.isRequired,
-  handleShowExportRequestsModal: PropTypes.func.isRequired,
   handleExportAllToFile: PropTypes.func.isRequired,
   handleImportFile: PropTypes.func.isRequired,
   handleImportUri: PropTypes.func.isRequired,

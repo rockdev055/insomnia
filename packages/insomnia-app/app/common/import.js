@@ -188,78 +188,51 @@ export async function importRaw(
   };
 }
 
-export async function exportWorkspacesHAR(
+export async function exportHAR(
   parentDoc: BaseModel | null = null,
   includePrivateDocs: boolean = false,
 ): Promise<string> {
-  const docs: Array<BaseModel> = await getDocWithDescendants(parentDoc, includePrivateDocs);
-  const requests: Array<BaseModel> = docs.filter(doc => doc.type === models.request.type);
-  return exportRequestsHAR(requests, includePrivateDocs);
-}
-
-export async function exportRequestsHAR(
-  requests: Array<BaseModel>,
-  includePrivateDocs: boolean = false,
-): Promise<string> {
-  const workspaces: Array<BaseModel> = [];
-  const mapRequestIdToWorkspace: Object = {};
-  const workspaceLookup: Object = {};
-  for (const request of requests) {
-    const ancestors: Array<BaseModel> = await db.withAncestors(request, [
-      models.workspace.type,
-      models.requestGroup.type,
-    ]);
-    const workspace = ancestors.find(ancestor => ancestor.type === models.workspace.type);
-    mapRequestIdToWorkspace[request._id] = workspace;
-    if (workspace == null || workspaceLookup.hasOwnProperty(workspace._id)) {
-      continue;
-    }
-    workspaceLookup[workspace._id] = true;
-    workspaces.push(workspace);
+  let workspaces;
+  if (parentDoc) {
+    workspaces = [parentDoc];
+  } else {
+    workspaces = await models.workspace.all();
   }
 
-  const mapWorkspaceIdToEnvironmentId: Object = {};
-  for (const workspace of workspaces) {
+  const workspaceEnvironmentLookup = {};
+  for (let workspace of workspaces) {
     const workspaceMeta = await models.workspaceMeta.getByParentId(workspace._id);
     let environmentId = workspaceMeta ? workspaceMeta.activeEnvironmentId : null;
     const environment = await models.environment.getById(environmentId || 'n/a');
     if (!environment || (environment.isPrivate && !includePrivateDocs)) {
       environmentId = 'n/a';
     }
-    mapWorkspaceIdToEnvironmentId[workspace._id] = environmentId;
+    workspaceEnvironmentLookup[workspace._id] = environmentId;
   }
 
-  requests = requests.sort((a: Object, b: Object) => (a.metaSortKey < b.metaSortKey ? -1 : 1));
-  const harRequests: Array<Object> = [];
-  for (const request of requests) {
-    const workspace = mapRequestIdToWorkspace[request._id];
-    if (workspace == null) {
-      // Workspace not found for request, so don't export it.
-      continue;
-    }
-    const environmentId = mapWorkspaceIdToEnvironmentId[workspace._id];
-    harRequests.push({
-      requestId: request._id,
-      environmentId: environmentId,
-    });
+  const requests = [];
+  for (let workspace of workspaces) {
+    const docs: Array<BaseModel> = await getDocWithDescendants(workspace, includePrivateDocs);
+    const workspaceRequests = docs
+      .filter(d => d.type === models.request.type)
+      .sort((a: Object, b: Object) => (a.metaSortKey < b.metaSortKey ? -1 : 1))
+      .map((request: BaseModel) => {
+        return {
+          requestId: request._id,
+          environmentId: workspaceEnvironmentLookup[workspace._id],
+        };
+      });
+
+    requests.push(...workspaceRequests);
   }
 
-  const data = await har.exportHar(harRequests);
+  const data = await har.exportHar(requests);
 
   return JSON.stringify(data, null, '\t');
 }
 
-export async function exportWorkspacesJSON(
+export async function exportJSON(
   parentDoc: BaseModel | null = null,
-  includePrivateDocs: boolean = false,
-): Promise<string> {
-  const docs: Array<BaseModel> = await getDocWithDescendants(parentDoc, includePrivateDocs);
-  const requests: Array<BaseModel> = docs.filter(doc => doc.type === models.request.type);
-  return exportRequestsJSON(requests, includePrivateDocs);
-}
-
-export async function exportRequestsJSON(
-  requests: Array<BaseModel>,
   includePrivateDocs: boolean = false,
 ): Promise<string> {
   const data = {
@@ -270,49 +243,18 @@ export async function exportRequestsJSON(
     resources: [],
   };
 
-  const docs: Array<BaseModel> = [];
-  const workspaces: Array<BaseModel> = [];
-  const mapTypeAndIdToDoc: Object = {};
-  for (const req of requests) {
-    const ancestors: Array<BaseModel> = await db.withAncestors(req);
-    for (const ancestor of ancestors) {
-      const key = ancestor.type + '___' + ancestor._id;
-      if (mapTypeAndIdToDoc.hasOwnProperty(key)) {
-        continue;
-      }
-      mapTypeAndIdToDoc[key] = ancestor;
-      docs.push(ancestor);
-      if (ancestor.type === models.workspace.type) {
-        workspaces.push(ancestor);
-      }
-    }
-  }
-
-  for (const workspace of workspaces) {
-    const descendants: Array<BaseModel> = (await db.withDescendants(workspace)).filter(d => {
-      // Only interested in these additional model types.
-      return d.type === models.cookieJar.type || d.type === models.environment.type;
-    });
-    docs.push(...descendants);
-  }
+  const docs: Array<BaseModel> = await getDocWithDescendants(parentDoc, includePrivateDocs);
 
   data.resources = docs
-    .filter(d => {
-      // Only export these model types.
-      if (
-        !(
-          d.type === models.request.type ||
-          d.type === models.requestGroup.type ||
-          d.type === models.workspace.type ||
-          d.type === models.cookieJar.type ||
-          d.type === models.environment.type
-        )
-      ) {
-        return false;
-      }
-      // BaseModel doesn't have isPrivate, so cast it first.
-      return !(d: Object).isPrivate || includePrivateDocs;
-    })
+    .filter(
+      d =>
+        // Only export these model types
+        d.type === models.request.type ||
+        d.type === models.requestGroup.type ||
+        d.type === models.workspace.type ||
+        d.type === models.cookieJar.type ||
+        d.type === models.environment.type,
+    )
     .map((d: Object) => {
       if (d.type === models.workspace.type) {
         d._type = EXPORT_TYPE_WORKSPACE;
