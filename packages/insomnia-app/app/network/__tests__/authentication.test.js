@@ -3,7 +3,7 @@ import { AUTH_OAUTH_1 } from '../../common/constants';
 
 describe('OAuth 1.0', () => {
   it('Does OAuth 1.0', async () => {
-    const authentication = {
+    const header = await getAuthHeader('req_123', 'https://insomnia.rest/', 'GET', {
       type: AUTH_OAUTH_1,
       consumerKey: 'consumerKey',
       consumerSecret: 'consumerSecret',
@@ -13,9 +13,7 @@ describe('OAuth 1.0', () => {
       signatureMethod: 'HMAC-SHA1',
       nonce: 'nonce',
       timestamp: '1234567890',
-    };
-    const request = { url: 'https://insomnia.rest/', method: 'GET', authentication };
-    const header = await getAuthHeader(request, 'https://insomnia.rest/');
+    });
 
     expect(header).toEqual({
       name: 'Authorization',
@@ -33,7 +31,7 @@ describe('OAuth 1.0', () => {
   });
 
   it('Does OAuth 1.0 with RSA-SHA1', async () => {
-    const authentication = {
+    const header = await getAuthHeader('req_123', 'https://insomnia.rest/', 'GET', {
       type: AUTH_OAUTH_1,
       consumerKey: 'consumerKey',
       consumerSecret: 'consumerSecret',
@@ -59,9 +57,7 @@ describe('OAuth 1.0', () => {
         '-----END RSA PRIVATE KEY-----',
       nonce: 'nonce',
       timestamp: '1234567890',
-    };
-    const request = { url: 'https://insomnia.rest/', method: 'GET', authentication };
-    const header = await getAuthHeader(request, 'https://insomnia.rest/');
+    });
 
     expect(header).toEqual({
       name: 'Authorization',
@@ -79,14 +75,12 @@ describe('OAuth 1.0', () => {
   });
 
   it('Does OAuth 1.0 with defaults', async () => {
-    const authentication = {
+    const header = await getAuthHeader('req_123', 'https://insomnia.rest/', 'GET', {
       type: AUTH_OAUTH_1,
       consumerKey: 'consumerKey',
       consumerSecret: 'consumerSecret',
       signatureMethod: 'HMAC-SHA1',
-    };
-    const request = { url: 'https://insomnia.rest/', method: 'GET', authentication };
-    const header = await getAuthHeader(request, 'https://insomnia.rest/');
+    });
 
     expect(header.name).toBe('Authorization');
     expect(header.value).toMatch(

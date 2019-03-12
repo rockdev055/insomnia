@@ -67,6 +67,7 @@ import AskModal from '../components/modals/ask-modal';
 import { updateMimeType } from '../../models/request';
 import MoveRequestGroupModal from '../components/modals/move-request-group-modal';
 import * as themes from '../../plugins/misc';
+import ExportRequestsModal from '../components/modals/export-requests-modal';
 
 @autobind
 class App extends PureComponent {
@@ -761,6 +762,10 @@ class App extends PureComponent {
     await this._handleSetSidebarHidden(sidebarHidden);
   }
 
+  _handleShowExportRequestsModal() {
+    showModal(ExportRequestsModal);
+  }
+
   _setWrapperRef(n) {
     this._wrapper = n;
   }
@@ -1014,6 +1019,7 @@ class App extends PureComponent {
               handleSetSidebarFilter={this._handleSetSidebarFilter}
               handleToggleMenuBar={this._handleToggleMenuBar}
               handleUpdateRequestMimeType={this._handleUpdateRequestMimeType}
+              handleShowExportRequestsModal={this._handleShowExportRequestsModal}
               isVariableUncovered={this.state.isVariableUncovered}
             />
           </ErrorBoundary>
@@ -1138,7 +1144,8 @@ function mapDispatchToProps(dispatch) {
     handleImportFileToWorkspace: global.importFile,
     handleImportUriToWorkspace: global.importUri,
     handleCommand: global.newCommand,
-    handleExportFile: global.exportFile,
+    handleExportFile: global.exportWorkspacesToFile,
+    handleExportRequestsToFile: global.exportRequestsToFile,
     handleMoveDoc: _moveDoc,
   };
 }

@@ -594,7 +594,12 @@ export async function _actuallySend(
         } else if (renderedRequest.authentication.type === AUTH_NETRC) {
           setOpt(Curl.option.NETRC, Curl.netrc.REQUIRED);
         } else {
-          const authHeader = await getAuthHeader(renderedRequest, finalUrl);
+          const authHeader = await getAuthHeader(
+            renderedRequest._id,
+            finalUrl,
+            renderedRequest.method,
+            renderedRequest.authentication,
+          );
 
           if (authHeader) {
             headers.push({
