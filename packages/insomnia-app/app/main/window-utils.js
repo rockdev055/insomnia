@@ -102,6 +102,7 @@ export function createWindow() {
         : []),
       {
         label: `${MNEMONIC_SYM}Preferences`,
+        accelerator: 'CmdOrCtrl+,',
         click: function(menuItem, window, e) {
           if (!window || !window.webContents) {
             return;
@@ -190,6 +191,7 @@ export function createWindow() {
       },
       {
         label: `Toggle ${MNEMONIC_SYM}Sidebar`,
+        accelerator: 'CmdOrCtrl+\\',
         click: () => {
           const window = BrowserWindow.getFocusedWindow();
           if (!window || !window.webContents) {
@@ -228,6 +230,7 @@ export function createWindow() {
       },
       {
         label: `${MNEMONIC_SYM}Keyboard Shortcuts`,
+        accelerator: 'CmdOrCtrl+Shift+?',
         click: (menuItem, window, e) => {
           if (!window || !window.webContents) {
             return;
@@ -316,6 +319,7 @@ export function createWindow() {
     submenu: [
       {
         label: `${MNEMONIC_SYM}Reload Plugins`,
+        accelerator: 'CmdOrCtrl+Shift+R',
         click: () => {
           const window = BrowserWindow.getFocusedWindow();
           if (!window || !window.webContents) {

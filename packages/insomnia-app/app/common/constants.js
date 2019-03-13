@@ -76,6 +76,10 @@ export const ALT_SYM = isMac() ? '⌥' : 'Alt';
 export const SHIFT_SYM = isMac() ? '⇧' : 'Shift';
 export const META_SYM = isMac() ? '⌘' : 'Super';
 
+export function joinHotKeys(keys) {
+  return keys.join(isMac() ? '' : '+');
+}
+
 // Updates
 export const UPDATE_CHANNEL_STABLE = 'stable';
 export const UPDATE_CHANNEL_BETA = 'beta';

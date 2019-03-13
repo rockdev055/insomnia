@@ -200,10 +200,7 @@ class ResponsePane extends React.PureComponent<Props> {
                     <td>Send Request</td>
                     <td className="text-right">
                       <code>
-                        <Hotkey
-                          keyBindings={hotKeyRegistry[hotKeyRefs.REQUEST_SEND.id]}
-                          useFallbackMessage
-                        />
+                        <Hotkey keyBindings={hotKeyRegistry[hotKeyRefs.REQUEST_SEND.id]} />
                       </code>
                     </td>
                   </tr>
@@ -211,10 +208,7 @@ class ResponsePane extends React.PureComponent<Props> {
                     <td>Focus Url Bar</td>
                     <td className="text-right">
                       <code>
-                        <Hotkey
-                          keyBindings={hotKeyRegistry[hotKeyRefs.REQUEST_FOCUS_URL.id]}
-                          useFallbackMessage
-                        />
+                        <Hotkey keyBindings={hotKeyRegistry[hotKeyRefs.REQUEST_FOCUS_URL.id]} />
                       </code>
                     </td>
                   </tr>
@@ -222,10 +216,7 @@ class ResponsePane extends React.PureComponent<Props> {
                     <td>Manage Cookies</td>
                     <td className="text-right">
                       <code>
-                        <Hotkey
-                          keyBindings={hotKeyRegistry[hotKeyRefs.SHOW_COOKIES_EDITOR.id]}
-                          useFallbackMessage
-                        />
+                        <Hotkey keyBindings={hotKeyRegistry[hotKeyRefs.SHOW_COOKIES_EDITOR.id]} />
                       </code>
                     </td>
                   </tr>
@@ -235,7 +226,6 @@ class ResponsePane extends React.PureComponent<Props> {
                       <code>
                         <Hotkey
                           keyBindings={hotKeyRegistry[hotKeyRefs.ENVIRONMENT_SHOW_EDITOR.id]}
-                          useFallbackMessage
                         />
                       </code>
                     </td>

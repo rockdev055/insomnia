@@ -66,10 +66,6 @@ class SettingsModal extends PureComponent {
     }
   }
 
-  async _handleUpdateKeyBindings(hotKeyRegistry) {
-    models.settings.update(this.props.settings, { hotKeyRegistry });
-  }
-
   show(currentTabIndex = 0) {
     this.setState({ currentTabIndex });
     this.modal.show();
@@ -141,10 +137,7 @@ class SettingsModal extends PureComponent {
               <Theme handleChangeTheme={this._handleChangeTheme} activeTheme={settings.theme} />
             </TabPanel>
             <TabPanel className="react-tabs__tab-panel pad scrollable">
-              <SettingsShortcuts
-                hotKeyRegistry={settings.hotKeyRegistry}
-                handleUpdateKeyBindings={this._handleUpdateKeyBindings}
-              />
+              <SettingsShortcuts hotKeyRegistry={settings.hotKeyRegistry} />
             </TabPanel>
             <TabPanel className="react-tabs__tab-panel pad scrollable">
               <Account />

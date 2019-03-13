@@ -1,6 +1,6 @@
 // @flow
-import { keyboardKeys } from './keyboard-keys';
-import { ALT_SYM, CTRL_SYM, isMac, META_SYM, SHIFT_SYM } from './constants';
+import keycodes from './keycodes';
+import { isMac } from './constants';
 
 /**
  * The readable definition of a hotkey.
@@ -154,146 +154,146 @@ export const hotKeyRefs = {
  */
 const defaultRegistry: HotKeyRegistry = {
   [hotKeyRefs.WORKSPACE_SHOW_SETTINGS.id]: keyBinds(
-    keyComb(false, false, true, true, keyboardKeys.comma.keyCode),
-    keyComb(true, false, true, false, keyboardKeys.comma.keyCode),
+    keyComb(false, false, true, true, keycodes.comma),
+    keyComb(true, false, true, false, keycodes.comma),
   ),
 
   [hotKeyRefs.REQUEST_SHOW_SETTINGS.id]: keyBinds(
-    keyComb(false, true, true, true, keyboardKeys.comma.keyCode),
-    keyComb(true, true, true, false, keyboardKeys.comma.keyCode),
+    keyComb(false, true, true, true, keycodes.comma),
+    keyComb(true, true, true, false, keycodes.comma),
   ),
 
   [hotKeyRefs.PREFERENCES_SHOW_KEYBOARD_SHORTCUTS.id]: keyBinds(
-    keyComb(false, false, true, true, keyboardKeys.forwardslash.keyCode),
-    keyComb(true, false, true, false, keyboardKeys.forwardslash.keyCode),
+    keyComb(false, false, true, true, keycodes.forwardslash),
+    keyComb(true, false, true, false, keycodes.forwardslash),
   ),
 
   [hotKeyRefs.PREFERENCES_SHOW_GENERAL.id]: keyBinds(
-    keyComb(false, false, false, true, keyboardKeys.comma.keyCode),
-    keyComb(true, false, false, false, keyboardKeys.comma.keyCode),
+    keyComb(false, false, false, true, keycodes.comma),
+    keyComb(true, false, false, false, keycodes.comma),
   ),
 
   [hotKeyRefs.TOGGLE_MAIN_MENU.id]: keyBinds(
-    keyComb(false, true, false, true, keyboardKeys.comma.keyCode),
-    keyComb(true, true, false, false, keyboardKeys.comma.keyCode),
+    keyComb(false, true, false, true, keycodes.comma),
+    keyComb(true, true, false, false, keycodes.comma),
   ),
 
   [hotKeyRefs.SIDEBAR_TOGGLE.id]: keyBinds(
-    keyComb(false, false, false, true, keyboardKeys.backslash.keyCode),
-    keyComb(true, false, false, false, keyboardKeys.backslash.keyCode),
+    keyComb(false, false, false, true, keycodes.backslash),
+    keyComb(true, false, false, false, keycodes.backslash),
   ),
 
   [hotKeyRefs.REQUEST_QUICK_SWITCH.id]: keyBinds(
-    keyComb(false, false, false, true, keyboardKeys.p.keyCode),
-    keyComb(true, false, false, false, keyboardKeys.p.keyCode),
+    keyComb(false, false, false, true, keycodes.p),
+    keyComb(true, false, false, false, keycodes.p),
   ),
 
   [hotKeyRefs.PLUGIN_RELOAD.id]: keyBinds(
-    keyComb(false, false, true, true, keyboardKeys.r.keyCode),
-    keyComb(true, false, true, false, keyboardKeys.r.keyCode),
+    keyComb(false, false, true, true, keycodes.r),
+    keyComb(true, false, true, false, keycodes.r),
   ),
 
   [hotKeyRefs.SHOW_AUTOCOMPLETE.id]: keyBinds(
-    keyComb(true, false, false, false, keyboardKeys.space.keyCode),
-    keyComb(true, false, false, false, keyboardKeys.space.keyCode),
+    keyComb(true, false, false, false, keycodes.space),
+    keyComb(true, false, false, false, keycodes.space),
   ),
 
   [hotKeyRefs.REQUEST_SEND.id]: keyBinds(
     [
-      keyComb(false, false, false, true, keyboardKeys.enter.keyCode),
-      keyComb(false, false, false, true, keyboardKeys.r.keyCode),
-      keyComb(false, false, false, false, keyboardKeys.f5.keyCode),
+      keyComb(false, false, false, true, keycodes.enter),
+      keyComb(false, false, false, true, keycodes.r),
+      keyComb(false, false, false, false, keycodes.f5),
     ],
     [
-      keyComb(true, false, false, false, keyboardKeys.enter.keyCode),
-      keyComb(true, false, false, false, keyboardKeys.r.keyCode),
-      keyComb(false, false, false, false, keyboardKeys.f5.keyCode),
+      keyComb(true, false, false, false, keycodes.enter),
+      keyComb(true, false, false, false, keycodes.r),
+      keyComb(false, false, false, false, keycodes.f5),
     ],
   ),
 
   [hotKeyRefs.REQUEST_SHOW_OPTIONS.id]: keyBinds(
-    keyComb(false, false, true, true, keyboardKeys.enter.keyCode),
-    keyComb(true, false, true, false, keyboardKeys.enter.keyCode),
+    keyComb(false, false, true, true, keycodes.enter),
+    keyComb(true, false, true, false, keycodes.enter),
   ),
 
   [hotKeyRefs.ENVIRONMENT_SHOW_EDITOR.id]: keyBinds(
-    keyComb(false, false, false, true, keyboardKeys.e.keyCode),
-    keyComb(true, false, false, false, keyboardKeys.e.keyCode),
+    keyComb(false, false, false, true, keycodes.e),
+    keyComb(true, false, false, false, keycodes.e),
   ),
 
   [hotKeyRefs.ENVIRONMENT_SHOW_SWITCH_MENU.id]: keyBinds(
-    keyComb(false, false, true, true, keyboardKeys.e.keyCode),
-    keyComb(true, false, true, false, keyboardKeys.e.keyCode),
+    keyComb(false, false, true, true, keycodes.e),
+    keyComb(true, false, true, false, keycodes.e),
   ),
 
   [hotKeyRefs.REQUEST_TOGGLE_HTTP_METHOD_MENU.id]: keyBinds(
-    keyComb(false, false, true, true, keyboardKeys.l.keyCode),
-    keyComb(true, false, true, false, keyboardKeys.l.keyCode),
+    keyComb(false, false, true, true, keycodes.l),
+    keyComb(true, false, true, false, keycodes.l),
   ),
 
   [hotKeyRefs.REQUEST_TOGGLE_HISTORY.id]: keyBinds(
-    keyComb(false, false, true, true, keyboardKeys.h.keyCode),
-    keyComb(true, false, true, false, keyboardKeys.h.keyCode),
+    keyComb(false, false, true, true, keycodes.h),
+    keyComb(true, false, true, false, keycodes.h),
   ),
 
   [hotKeyRefs.REQUEST_FOCUS_URL.id]: keyBinds(
-    keyComb(false, false, false, true, keyboardKeys.l.keyCode),
-    keyComb(true, false, false, false, keyboardKeys.l.keyCode),
+    keyComb(false, false, false, true, keycodes.l),
+    keyComb(true, false, false, false, keycodes.l),
   ),
 
   [hotKeyRefs.REQUEST_SHOW_GENERATE_CODE_EDITOR.id]: keyBinds(
-    keyComb(false, false, true, true, keyboardKeys.g.keyCode),
-    keyComb(true, false, true, false, keyboardKeys.g.keyCode),
+    keyComb(false, false, true, true, keycodes.g),
+    keyComb(true, false, true, false, keycodes.g),
   ),
 
   [hotKeyRefs.SIDEBAR_FOCUS_FILTER.id]: keyBinds(
-    keyComb(false, false, true, true, keyboardKeys.f.keyCode),
-    keyComb(true, false, true, false, keyboardKeys.f.keyCode),
+    keyComb(false, false, true, true, keycodes.f),
+    keyComb(true, false, true, false, keycodes.f),
   ),
 
   [hotKeyRefs.RESPONSE_FOCUS.id]: keyBinds(
-    keyComb(false, false, false, true, keyboardKeys.singlequote.keyCode),
-    keyComb(true, false, false, false, keyboardKeys.singlequote.keyCode),
+    keyComb(false, false, false, true, keycodes.singlequote),
+    keyComb(true, false, false, false, keycodes.singlequote),
   ),
 
   [hotKeyRefs.SHOW_COOKIES_EDITOR.id]: keyBinds(
-    keyComb(false, false, false, true, keyboardKeys.k.keyCode),
-    keyComb(true, false, false, false, keyboardKeys.k.keyCode),
+    keyComb(false, false, false, true, keycodes.k),
+    keyComb(true, false, false, false, keycodes.k),
   ),
 
   [hotKeyRefs.REQUEST_SHOW_CREATE.id]: keyBinds(
-    keyComb(false, false, false, true, keyboardKeys.n.keyCode),
-    keyComb(true, false, false, false, keyboardKeys.n.keyCode),
+    keyComb(false, false, false, true, keycodes.n),
+    keyComb(true, false, false, false, keycodes.n),
   ),
 
   [hotKeyRefs.REQUEST_SHOW_DELETE.id]: keyBinds(
-    keyComb(false, false, true, true, keyboardKeys.delete.keyCode),
-    keyComb(true, false, true, false, keyboardKeys.delete.keyCode),
+    keyComb(false, false, true, true, keycodes.delete),
+    keyComb(true, false, true, false, keycodes.delete),
   ),
 
   [hotKeyRefs.REQUEST_SHOW_CREATE_FOLDER.id]: keyBinds(
-    keyComb(false, false, true, true, keyboardKeys.n.keyCode),
-    keyComb(true, false, true, false, keyboardKeys.n.keyCode),
+    keyComb(false, false, true, true, keycodes.n),
+    keyComb(true, false, true, false, keycodes.n),
   ),
 
   [hotKeyRefs.REQUEST_SHOW_DUPLICATE.id]: keyBinds(
-    keyComb(false, false, false, true, keyboardKeys.d.keyCode),
-    keyComb(true, false, false, false, keyboardKeys.d.keyCode),
+    keyComb(false, false, false, true, keycodes.d),
+    keyComb(true, false, false, false, keycodes.d),
   ),
 
   [hotKeyRefs.CLOSE_DROPDOWN.id]: keyBinds(
-    keyComb(false, false, false, false, keyboardKeys.esc.keyCode),
-    keyComb(false, false, false, false, keyboardKeys.esc.keyCode),
+    keyComb(false, false, false, false, keycodes.esc),
+    keyComb(false, false, false, false, keycodes.esc),
   ),
 
   [hotKeyRefs.CLOSE_MODAL.id]: keyBinds(
-    keyComb(false, false, false, false, keyboardKeys.esc.keyCode),
-    keyComb(false, false, false, false, keyboardKeys.esc.keyCode),
+    keyComb(false, false, false, false, keycodes.esc),
+    keyComb(false, false, false, false, keycodes.esc),
   ),
 
   [hotKeyRefs.ENVIRONMENT_UNCOVER_VARIABLES.id]: keyBinds(
-    keyComb(false, true, true, false, keyboardKeys.u.keyCode),
-    keyComb(false, true, true, false, keyboardKeys.u.keyCode),
+    keyComb(false, true, true, false, keycodes.u),
+    keyComb(false, true, true, false, keycodes.u),
   ),
 };
 
@@ -306,19 +306,6 @@ function copyKeyCombs(sources: Array<KeyCombination>): Array<KeyCombination> {
 }
 
 /**
- * Get a new copy of key bindings with default key combinations.
- * @param hotKeyRefId
- * @returns {KeyBindings}
- */
-export function newDefaultKeyBindings(hotKeyRefId: string): KeyBindings {
-  const keyBindings: KeyBindings = defaultRegistry[hotKeyRefId];
-  return {
-    macKeys: copyKeyCombs(keyBindings.macKeys),
-    winLinuxKeys: copyKeyCombs(keyBindings.winLinuxKeys),
-  };
-}
-
-/**
  * Get a new copy of hotkey registry with default values.
  * @returns {HotKeyRegistry}
  */
@@ -328,7 +315,11 @@ export function newDefaultRegistry(): HotKeyRegistry {
     if (!defaultRegistry.hasOwnProperty(refId)) {
       continue;
     }
-    newDefaults[refId] = newDefaultKeyBindings(refId);
+    const keyBindings: KeyBindings = defaultRegistry[refId];
+    newDefaults[refId] = {
+      macKeys: copyKeyCombs(keyBindings.macKeys),
+      winLinuxKeys: copyKeyCombs(keyBindings.winLinuxKeys),
+    };
   }
   return newDefaults;
 }
@@ -346,120 +337,36 @@ export function getPlatformKeyCombinations(bindings: KeyBindings): Array<KeyComb
 }
 
 /**
- * Determine whether two key combinations are the same by comparing each of their keys.
- * @param keyComb1
- * @param keyComb2
- * @returns {boolean}
- */
-export function areSameKeyCombinations(
-  keyComb1: KeyCombination,
-  keyComb2: KeyCombination,
-): boolean {
-  return (
-    keyComb1.alt === keyComb2.alt &&
-    keyComb1.shift === keyComb2.shift &&
-    keyComb1.ctrl === keyComb2.ctrl &&
-    keyComb1.meta === keyComb2.meta &&
-    keyComb1.keyCode === keyComb2.keyCode
-  );
-}
-
-/**
- * Checks whether the given key bindings is the same as the default one,
- * identified with hot key reference id.
- * @param hotKeyRefId refers to the default key bindings to check.
- * @param keyBinds to check with the default ones.
- * @returns {boolean}
- */
-export function areKeyBindingsSameAsDefault(hotKeyRefId: string, keyBinds: KeyBindings): boolean {
-  const keyCombs = getPlatformKeyCombinations(keyBinds);
-  const defaultKeyCombs = getPlatformKeyCombinations(defaultRegistry[hotKeyRefId]);
-  if (keyCombs.length !== defaultKeyCombs.length) {
-    return false;
-  }
-  for (const keyComb of keyCombs) {
-    const found = defaultKeyCombs.find(defKeyComb => {
-      if (areSameKeyCombinations(keyComb, defKeyComb)) {
-        return true;
-      }
-    });
-    if (found == null) {
-      return false;
-    }
-  }
-  return true;
-}
-
-/**
  * Gets the displayed text of a key code.
  * @param keyCode
  * @returns {string}
  */
 export function getChar(keyCode: number): string {
   let char;
-  const key = Object.keys(keyboardKeys).find(k => keyboardKeys[k].keyCode === keyCode);
+  const keyCodeStr = Object.keys(keycodes).find(k => keycodes[k] === keyCode);
 
-  if (!key) {
+  if (!keyCodeStr) {
     console.error('Invalid key code', keyCode);
   } else {
-    char = keyboardKeys[key].label;
+    const cap = keyCodeStr.toUpperCase();
+    if (cap === 'ENTER') {
+      char = 'Enter';
+    } else if (cap === 'DELETE') {
+      char = 'Delete';
+    } else if (cap === 'COMMA') {
+      char = ',';
+    } else if (cap === 'BACKSLASH') {
+      char = '\\';
+    } else if (cap === 'FORWARDSLASH') {
+      char = '/';
+    } else if (cap === 'SINGLEQUOTE') {
+      char = "'";
+    } else if (cap === 'SPACE') {
+      char = 'Space';
+    } else {
+      char = cap;
+    }
   }
 
   return char || 'unknown';
-}
-
-function joinHotKeys(mustUsePlus: boolean, keys: Array<string>): string {
-  if (!mustUsePlus && isMac()) {
-    return keys.join('');
-  }
-  return keys.join('+');
-}
-
-/**
- * Check whether key code is a modifier key, i.e., alt, shift, ctrl, or meta.
- * @param keyCode
- * @returns {boolean}
- */
-export function isModifierKeyCode(keyCode: number): boolean {
-  return (
-    keyCode === keyboardKeys.alt.keyCode ||
-    keyCode === keyboardKeys.shift.keyCode ||
-    keyCode === keyboardKeys.ctrl.keyCode ||
-    // Meta keys.
-    keyCode === keyboardKeys.leftwindowkey.keyCode ||
-    keyCode === keyboardKeys.rightwindowkey.keyCode ||
-    keyCode === keyboardKeys.selectkey.keyCode
-  );
-}
-
-/**
- * Construct the display string of a key combination based on platform.
- * For example, the display of alt in Windows or Linux would be "Alt";
- * while in Mac would be "⌥".
- * @param keyComb
- * @param mustUsePlus if true will join the characters with "+" for all platforms;
- * otherwise if the platform is Mac, the characters will be next to each other.
- * @returns the constructed string, if keyCode is null and the characters are joint with "+",
- * it will have a dangling "+" as the last character, e.g., "Alt+Ctrl+".
- */
-export function constructKeyCombinationDisplay(
-  keyComb: KeyCombination,
-  mustUsePlus: boolean,
-): string {
-  const { ctrl, alt, shift, meta, keyCode } = keyComb;
-  const chars = [];
-
-  alt && chars.push(ALT_SYM);
-  shift && chars.push(SHIFT_SYM);
-  ctrl && chars.push(CTRL_SYM);
-  meta && chars.push(META_SYM);
-  if (keyCode != null && !isModifierKeyCode(keyCode)) {
-    chars.push(getChar(keyCode));
-  }
-
-  let joint = joinHotKeys(mustUsePlus, chars);
-  if (mustUsePlus && isModifierKeyCode(keyCode)) {
-    joint += '+';
-  }
-  return joint;
 }
