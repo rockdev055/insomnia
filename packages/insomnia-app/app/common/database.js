@@ -140,7 +140,6 @@ export async function init(types: Array<string>, config: Object = {}, forceReset
 // ~~~~~~~~~~~~~~~~ //
 
 let bufferingChanges = false;
-let bufferChangesId = 1;
 let changeBuffer = [];
 let changeListeners = [];
 
@@ -152,16 +151,13 @@ export function offChange(callback: Function): void {
   changeListeners = changeListeners.filter(l => l !== callback);
 }
 
-/** buffers database changes and returns false if was already buffering */
 export const bufferChanges = (database.bufferChanges = async function(
   millis: number = 1000,
-): Promise<number> {
+): Promise<void> {
   if (db._empty) return _send('bufferChanges', ...arguments);
 
   bufferingChanges = true;
   setTimeout(database.flushChanges, millis);
-
-  return ++bufferChangesId;
 });
 
 export const flushChangesAsync = (database.flushChangesAsync = async function() {
@@ -170,13 +166,8 @@ export const flushChangesAsync = (database.flushChangesAsync = async function() 
   });
 });
 
-export const flushChanges = (database.flushChanges = async function(id: number = 0) {
+export const flushChanges = (database.flushChanges = async function() {
   if (db._empty) return _send('flushChanges', ...arguments);
-
-  // Only flush if ID is 0 or the current flush ID is the same as passed
-  if (id !== 0 && bufferChangesId !== id) {
-    return;
-  }
 
   bufferingChanges = false;
   const changes = [...changeBuffer];
@@ -386,7 +377,7 @@ export const remove = (database.remove = async function<T: BaseModel>(
 ): Promise<void> {
   if (db._empty) return _send('remove', ...arguments);
 
-  const flushId = await database.bufferChanges();
+  await database.bufferChanges();
 
   const docs = await database.withDescendants(doc);
   const docIds = docs.map(d => d._id);
@@ -397,18 +388,7 @@ export const remove = (database.remove = async function<T: BaseModel>(
 
   docs.map(d => notifyOfChange(CHANGE_REMOVE, d, fromSync));
 
-  await database.flushChanges(flushId);
-});
-
-/** Removes entries without removing their children */
-export const unsafeRemove = (database.unsafeRemove = async function<T: BaseModel>(
-  doc: T,
-  fromSync: boolean = false,
-): Promise<void> {
-  if (db._empty) return _send('unsafeRemove', ...arguments);
-
-  db[doc.type].remove({ _id: doc._id });
-  notifyOfChange(CHANGE_REMOVE, doc, fromSync);
+  await database.flushChanges();
 });
 
 export const removeWhere = (database.removeWhere = async function(
@@ -417,7 +397,7 @@ export const removeWhere = (database.removeWhere = async function(
 ): Promise<void> {
   if (db._empty) return _send('removeWhere', ...arguments);
 
-  const flushId = await database.bufferChanges();
+  await database.bufferChanges();
 
   for (const doc of await database.find(type, query)) {
     const docs = await database.withDescendants(doc);
@@ -430,7 +410,7 @@ export const removeWhere = (database.removeWhere = async function(
     docs.map(d => notifyOfChange(CHANGE_REMOVE, d, false));
   }
 
-  await database.flushChanges(flushId);
+  await database.flushChanges();
 });
 
 // ~~~~~~~~~~~~~~~~~~~ //
@@ -486,14 +466,10 @@ export const withDescendants = (database.withDescendants = async function(
         continue;
       }
 
-      const promises = [];
       for (const type of allTypes()) {
         // If the doc is null, we want to search for parentId === null
         const parentId = d ? d._id : null;
-        promises.push(database.find(type, { parentId }));
-      }
-
-      for (const more of await Promise.all(promises)) {
+        const more = await database.find(type, { parentId });
         foundDocs = [...foundDocs, ...more];
       }
     }
@@ -552,7 +528,7 @@ export const duplicate = (database.duplicate = async function<T: BaseModel>(
 ): Promise<T> {
   if (db._empty) return _send('duplicate', ...arguments);
 
-  const flushId = await database.bufferChanges();
+  await database.bufferChanges();
 
   async function next<T: BaseModel>(docToCopy: T, patch: Object): Promise<T> {
     // 1. Copy the doc
@@ -582,7 +558,7 @@ export const duplicate = (database.duplicate = async function<T: BaseModel>(
 
   const createdDoc = await next(originalDoc, patch);
 
-  await database.flushChanges(flushId);
+  await database.flushChanges();
 
   return createdDoc;
 });

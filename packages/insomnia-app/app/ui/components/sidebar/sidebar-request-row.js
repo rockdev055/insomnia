@@ -78,7 +78,6 @@ class SidebarRequestRow extends PureComponent {
       request,
       requestGroup,
       isActive,
-      hotKeyRegistry,
     } = this.props;
 
     const { dragDirection } = this.state;
@@ -135,7 +134,6 @@ class SidebarRequestRow extends PureComponent {
                 handleShowSettings={this._handleShowRequestSettings}
                 request={request}
                 requestGroup={requestGroup}
-                hotKeyRegistry={hotKeyRegistry}
               />
             </div>
           </div>
@@ -163,7 +161,6 @@ SidebarRequestRow.propTypes = {
   // Other
   filter: PropTypes.string.isRequired,
   isActive: PropTypes.bool.isRequired,
-  hotKeyRegistry: PropTypes.object.isRequired,
 
   // React DnD
   isDragging: PropTypes.bool,

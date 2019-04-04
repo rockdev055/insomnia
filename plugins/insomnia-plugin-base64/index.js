@@ -13,33 +13,20 @@ module.exports.templateTags = [
         ],
       },
       {
-        displayName: 'Kind',
-        type: 'enum',
-        options: [{ displayName: 'Normal', value: 'normal' }, { displayName: 'URL', value: 'url' }],
-      },
-      {
         displayName: 'Value',
         type: 'string',
         placeholder: 'My text',
       },
     ],
-    run(context, action, kind, text) {
+    run(context, op, text) {
       text = text || '';
 
-      if (action === 'encode') {
-        if (kind === 'normal') {
-          return Buffer.from(text, 'utf8').toString('base64');
-        } else if (kind === 'url') {
-          return Buffer.from(text, 'utf8')
-            .toString('base64')
-            .replace(/\+/g, '-')
-            .replace(/\//g, '_')
-            .replace(/=/g, '');
-        }
-      } else if (action === 'decode') {
+      if (op === 'encode') {
+        return Buffer.from(text, 'utf8').toString('base64');
+      } else if (op === 'decode') {
         return Buffer.from(text, 'base64').toString('utf8');
       } else {
-        throw new Error('Unsupported operation "' + action + '". Must be encode or decode.');
+        throw new Error('Unsupported operation "' + op + '". Must be encode or decode.');
       }
     },
   },

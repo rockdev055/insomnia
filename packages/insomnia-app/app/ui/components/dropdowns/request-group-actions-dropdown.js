@@ -12,7 +12,7 @@ import {
 import EnvironmentEditModal from '../modals/environment-edit-modal';
 import * as models from '../../../models';
 import { showPrompt, showModal } from '../modals/index';
-import { hotKeyRefs } from '../../../common/hotkeys';
+import * as hotkeys from '../../../common/hotkeys';
 
 @autobind
 class RequestGroupActionsDropdown extends PureComponent {
@@ -63,7 +63,6 @@ class RequestGroupActionsDropdown extends PureComponent {
   render() {
     const {
       requestGroup, // eslint-disable-line no-unused-vars
-      hotKeyRegistry,
       ...other
     } = this.props;
 
@@ -74,11 +73,11 @@ class RequestGroupActionsDropdown extends PureComponent {
         </DropdownButton>
         <DropdownItem onClick={this._handleRequestCreate}>
           <i className="fa fa-plus-circle" /> New Request
-          <DropdownHint keyBindings={hotKeyRegistry[hotKeyRefs.REQUEST_SHOW_CREATE.id]} />
+          <DropdownHint hotkey={hotkeys.CREATE_REQUEST} />
         </DropdownItem>
         <DropdownItem onClick={this._handleRequestGroupCreate}>
           <i className="fa fa-folder" /> New Folder
-          <DropdownHint keyBindings={hotKeyRegistry[hotKeyRefs.REQUEST_SHOW_CREATE_FOLDER.id]} />
+          <DropdownHint hotkey={hotkeys.CREATE_FOLDER} />
         </DropdownItem>
         <DropdownDivider />
         <DropdownItem onClick={this._handleRequestGroupDuplicate}>
@@ -103,7 +102,6 @@ class RequestGroupActionsDropdown extends PureComponent {
 
 RequestGroupActionsDropdown.propTypes = {
   workspace: PropTypes.object.isRequired,
-  hotKeyRegistry: PropTypes.object.isRequired,
   handleCreateRequest: PropTypes.func.isRequired,
   handleCreateRequestGroup: PropTypes.func.isRequired,
   handleDuplicateRequestGroup: PropTypes.func.isRequired,

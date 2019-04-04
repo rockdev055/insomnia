@@ -11,7 +11,7 @@ import getOAuth2Token from './o-auth-2/get-token';
 import getOAuth1Token from './o-auth-1/get-token';
 import * as Hawk from 'hawk';
 import jwtAuthentication from 'jwt-authentication';
-import type { RenderedRequest } from '../common/render';
+import type { RequestAuthentication } from '../models/request';
 import { getBasicAuthHeader } from './basic-auth/get-header';
 import { getBearerAuthHeader } from './bearer-auth/get-header';
 
@@ -21,12 +21,11 @@ type Header = {
 };
 
 export async function getAuthHeader(
-  renderedRequest: RenderedRequest,
+  requestId: string,
   url: string,
+  method: string,
+  authentication: RequestAuthentication,
 ): Promise<Header | null> {
-  const { method, authentication } = renderedRequest;
-  const requestId = renderedRequest._id;
-
   if (authentication.disabled) {
     return null;
   }
@@ -70,21 +69,11 @@ export async function getAuthHeader(
   }
 
   if (authentication.type === AUTH_HAWK) {
-    const { id, key, algorithm, ext, validatePayload } = authentication;
-    let headerOptions = {
+    const { id, key, algorithm, ext } = authentication;
+    const header = Hawk.client.header(url, method, {
       credentials: { id, key, algorithm },
       ext: ext,
-    };
-
-    if (validatePayload) {
-      const payloadValidationFields = {
-        payload: renderedRequest.body.text,
-        contentType: renderedRequest.body.mimeType,
-      };
-      headerOptions = Object.assign({}, payloadValidationFields, headerOptions);
-    }
-
-    const header = Hawk.client.header(url, method, headerOptions);
+    });
     return {
       name: 'Authorization',
       value: header.field,

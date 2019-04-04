@@ -4,16 +4,13 @@ import autobind from 'autobind-decorator';
 import { Dropdown, DropdownHint, DropdownButton, DropdownItem } from '../base/dropdown';
 import { DEBOUNCE_MILLIS } from '../../../common/constants';
 import KeydownBinder from '../keydown-binder';
-import type { HotKeyRegistry } from '../../../common/hotkeys';
-import { hotKeyRefs } from '../../../common/hotkeys';
-import { executeHotKey } from '../../../common/hotkeys-listener';
+import * as hotkeys from '../../../common/hotkeys';
 
 type Props = {
   onChange: string => void,
   requestCreate: () => void,
   requestGroupCreate: () => void,
   filter: string,
-  hotKeyRegistry: HotKeyRegistry,
 };
 
 @autobind
@@ -51,13 +48,13 @@ class SidebarFilter extends React.PureComponent<Props> {
   }
 
   _handleKeydown(e: KeyboardEvent) {
-    executeHotKey(e, hotKeyRefs.SIDEBAR_FOCUS_FILTER, () => {
+    hotkeys.executeHotKey(e, hotkeys.FOCUS_FILTER, () => {
       this._input && this._input.focus();
     });
   }
 
   render() {
-    const { filter, hotKeyRegistry } = this.props;
+    const { filter } = this.props;
     return (
       <KeydownBinder onKeydown={this._handleKeydown}>
         <div className="sidebar__filter">
@@ -82,13 +79,11 @@ class SidebarFilter extends React.PureComponent<Props> {
             </DropdownButton>
             <DropdownItem onClick={this._handleRequestCreate}>
               <i className="fa fa-plus-circle" /> New Request
-              <DropdownHint keyBindings={hotKeyRegistry[hotKeyRefs.REQUEST_SHOW_CREATE.id]} />
+              <DropdownHint hotkey={hotkeys.CREATE_REQUEST} />
             </DropdownItem>
             <DropdownItem onClick={this._handleRequestGroupCreate}>
               <i className="fa fa-folder" /> New Folder
-              <DropdownHint
-                keyBindings={hotKeyRegistry[hotKeyRefs.REQUEST_SHOW_CREATE_FOLDER.id]}
-              />
+              <DropdownHint hotkey={hotkeys.CREATE_FOLDER} />
             </DropdownItem>
           </Dropdown>
         </div>

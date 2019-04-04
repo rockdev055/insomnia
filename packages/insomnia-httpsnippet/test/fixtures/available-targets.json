@@ -64,12 +64,6 @@
         "description": "Perform an asynchronous HTTP (Ajax) requests with jQuery"
       },
       {
-        "key": "fetch",
-        "title": "Fetch API",
-        "link": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
-        "description": "Browser API that offers a simple interface for fetching resources"
-      },
-      {
         "key": "xhr",
         "title": "XMLHttpRequest",
         "link": "https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest",
@@ -143,7 +137,7 @@
     "extname": ".m",
     "default": "nsurlsession",
     "clients": [
-      {
+       {
         "key": "nsurlsession",
         "title": "NSURLSession",
         "link": "https://developer.apple.com/library/mac/documentation/Foundation/Reference/NSURLSession_class/index.html",
@@ -157,7 +151,7 @@
     "extname": ".swift",
     "default": "nsurlsession",
     "clients": [
-      {
+       {
         "key": "nsurlsession",
         "title": "NSURLSession",
         "link": "https://developer.apple.com/library/mac/documentation/Foundation/Reference/NSURLSession_class/index.html",
@@ -171,7 +165,7 @@
     "extname": ".go",
     "default": "native",
     "clients": [
-      {
+       {
         "key": "native",
         "title": "NewRequest",
         "link": "http://golang.org/pkg/net/http/#NewRequest",

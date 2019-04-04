@@ -339,7 +339,12 @@ export async function exportHarWithRenderedRequest(
 
   // Set auth header if we have it
   if (!misc.hasAuthHeader(renderedRequest.headers)) {
-    const header = await getAuthHeader(renderedRequest, url);
+    const header = await getAuthHeader(
+      renderedRequest._id,
+      url,
+      renderedRequest.method,
+      renderedRequest.authentication,
+    );
     if (header) {
       renderedRequest.headers.push({
         name: header.name,
