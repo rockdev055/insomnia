@@ -27,7 +27,6 @@ describe('init()', () => {
     expect(Object.keys(result.request).sort()).toEqual([
       'addHeader',
       'addParameter',
-      'getAuthentication',
       'getBodyText',
       'getEnvironment',
       'getEnvironmentVariable',
@@ -43,7 +42,6 @@ describe('init()', () => {
       'hasParameter',
       'removeHeader',
       'removeParameter',
-      'setAuthenticationParameter',
       'setBodyText',
       'setCookie',
       'setHeader',
@@ -59,7 +57,6 @@ describe('init()', () => {
     const result = plugin.init(await models.request.getById('req_1'), CONTEXT, true);
     expect(Object.keys(result)).toEqual(['request']);
     expect(Object.keys(result.request).sort()).toEqual([
-      'getAuthentication',
       'getBodyText',
       'getEnvironment',
       'getEnvironmentVariable',
@@ -90,7 +87,6 @@ describe('request.*', () => {
       parentId: 'wrk_1',
       name: 'My Request',
       body: { text: 'body' },
-      authentication: { type: 'oauth2' },
       headers: [
         { name: 'hello', value: 'world' },
         { name: 'Content-Type', value: 'application/json' },
@@ -106,7 +102,6 @@ describe('request.*', () => {
     expect(result.request.getUrl()).toBe('');
     expect(result.request.getMethod()).toBe('GET');
     expect(result.request.getBodyText()).toBe('body');
-    expect(result.request.getAuthentication()).toEqual({ type: 'oauth2' });
   });
 
   it('works for parameters', async () => {
@@ -207,17 +202,5 @@ describe('request.*', () => {
     });
     expect(result.request.getEnvironmentVariable('null_test')).toBe(null);
     expect(result.request.getEnvironmentVariable('bad')).toBeUndefined();
-  });
-
-  it('works for authentication', async () => {
-    const request = await models.request.getById('req_1');
-    request.authentication = {}; // Because the plugin technically needs a RenderedRequest
-
-    const result = plugin.init(request, CONTEXT);
-
-    result.request.setAuthenticationParameter('foo', 'bar');
-    result.request.setAuthenticationParameter('foo', 'baz');
-    expect(result.request.getAuthentication()).toEqual({ foo: 'baz' });
-    expect(request.authentication).toEqual({ foo: 'baz' });
   });
 });

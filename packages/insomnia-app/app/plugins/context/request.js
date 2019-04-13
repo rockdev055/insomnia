@@ -131,16 +131,6 @@ export function init(
       }
     },
 
-    setAuthenticationParameter(name: string, value: string): void {
-      Object.assign(renderedRequest.authentication, {
-        [name]: value,
-      });
-    },
-
-    getAuthentication(): Object {
-      return renderedRequest.authentication;
-    },
-
     // NOTE: For these to make sense, we'd need to account for cookies in the jar as well
     // addCookie (name: string, value: string): void {}
     // getCookie (name: string): string | null {}
@@ -162,7 +152,6 @@ export function init(
     delete request.setParameter;
     delete request.addParameter;
     delete request.addParameter;
-    delete request.setAuthenticationParameter;
   }
 
   return { request };
