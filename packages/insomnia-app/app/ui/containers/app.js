@@ -58,8 +58,7 @@ import * as render from '../../common/render';
 import { getKeys } from '../../templating/utils';
 import { showAlert, showModal, showPrompt } from '../components/modals/index';
 import { exportHarRequest } from '../../common/har';
-import { hotKeyRefs } from '../../common/hotkeys';
-import { executeHotKey } from '../../common/hotkeys-listener';
+import * as hotkeys from '../../common/hotkeys';
 import KeydownBinder from '../components/keydown-binder';
 import ErrorBoundary from '../components/error-boundary';
 import * as plugins from '../../plugins';
@@ -101,20 +100,20 @@ class App extends PureComponent {
   _setGlobalKeyMap() {
     this._globalKeyMap = [
       [
-        hotKeyRefs.PREFERENCES_SHOW_KEYBOARD_SHORTCUTS,
+        hotkeys.SHOW_KEYBOARD_SHORTCUTS,
         () => {
           showModal(SettingsModal, TAB_INDEX_SHORTCUTS);
         },
       ],
       [
-        hotKeyRefs.WORKSPACE_SHOW_SETTINGS,
+        hotkeys.SHOW_WORKSPACE_SETTINGS,
         () => {
           const { activeWorkspace } = this.props;
           showModal(WorkspaceSettingsModal, activeWorkspace);
         },
       ],
       [
-        hotKeyRefs.REQUEST_SHOW_SETTINGS,
+        hotkeys.SHOW_REQUEST_SETTINGS,
         () => {
           if (this.props.activeRequest) {
             showModal(RequestSettingsModal, {
@@ -124,28 +123,29 @@ class App extends PureComponent {
         },
       ],
       [
-        hotKeyRefs.REQUEST_QUICK_SWITCH,
+        hotkeys.SHOW_QUICK_SWITCHER,
         () => {
           showModal(RequestSwitcherModal);
         },
       ],
-      [hotKeyRefs.REQUEST_SEND, this._handleSendShortcut],
+      [hotkeys.SEND_REQUEST, this._handleSendShortcut],
+      [hotkeys.SEND_REQUEST_F5, this._handleSendShortcut],
       [
-        hotKeyRefs.ENVIRONMENT_SHOW_EDITOR,
+        hotkeys.SHOW_ENVIRONMENTS,
         () => {
           const { activeWorkspace } = this.props;
           showModal(WorkspaceEnvironmentsEditModal, activeWorkspace);
         },
       ],
       [
-        hotKeyRefs.SHOW_COOKIES_EDITOR,
+        hotkeys.SHOW_COOKIES,
         () => {
           const { activeWorkspace } = this.props;
           showModal(CookiesModal, activeWorkspace);
         },
       ],
       [
-        hotKeyRefs.REQUEST_SHOW_CREATE,
+        hotkeys.CREATE_REQUEST,
         () => {
           const { activeRequest, activeWorkspace } = this.props;
           const parentId = activeRequest ? activeRequest.parentId : activeWorkspace._id;
@@ -153,7 +153,7 @@ class App extends PureComponent {
         },
       ],
       [
-        hotKeyRefs.REQUEST_SHOW_DELETE,
+        hotkeys.DELETE_REQUEST,
         () => {
           const { activeRequest } = this.props;
 
@@ -174,7 +174,7 @@ class App extends PureComponent {
         },
       ],
       [
-        hotKeyRefs.REQUEST_SHOW_CREATE_FOLDER,
+        hotkeys.CREATE_FOLDER,
         () => {
           const { activeRequest, activeWorkspace } = this.props;
           const parentId = activeRequest ? activeRequest.parentId : activeWorkspace._id;
@@ -182,19 +182,19 @@ class App extends PureComponent {
         },
       ],
       [
-        hotKeyRefs.REQUEST_SHOW_GENERATE_CODE_EDITOR,
+        hotkeys.GENERATE_CODE,
         async () => {
           showModal(GenerateCodeModal, this.props.activeRequest);
         },
       ],
       [
-        hotKeyRefs.REQUEST_SHOW_DUPLICATE,
+        hotkeys.DUPLICATE_REQUEST,
         async () => {
           await this._requestDuplicate(this.props.activeRequest);
         },
       ],
       [
-        hotKeyRefs.ENVIRONMENT_UNCOVER_VARIABLES,
+        hotkeys.UNCOVER_VARIABLES,
         async () => {
           await this._updateIsVariableUncovered();
         },
@@ -743,7 +743,7 @@ class App extends PureComponent {
 
   _handleKeyDown(e) {
     for (const [definition, callback] of this._globalKeyMap) {
-      executeHotKey(e, definition, callback);
+      hotkeys.executeHotKey(e, definition, callback);
     }
   }
 

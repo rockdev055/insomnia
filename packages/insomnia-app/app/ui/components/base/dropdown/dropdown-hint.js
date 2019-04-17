@@ -1,16 +1,16 @@
 // @flow
 import * as React from 'react';
+import type { Hotkey as HotkeyType } from '../../../../common/hotkeys';
 import Hotkey from '../../hotkey';
-import type { KeyBindings } from '../../../../common/hotkeys';
 
 type Props = {
-  keyBindings: KeyBindings,
+  hotkey: HotkeyType,
 };
 
 class DropdownHint extends React.PureComponent<Props> {
   render() {
-    const { keyBindings } = this.props;
-    return <Hotkey className="dropdown__hint" keyBindings={keyBindings} />;
+    const { hotkey } = this.props;
+    return <Hotkey className="dropdown__hint" hotkey={hotkey} />;
   }
 }
 

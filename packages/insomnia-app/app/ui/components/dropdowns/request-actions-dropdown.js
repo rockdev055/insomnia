@@ -10,7 +10,7 @@ import {
   DropdownItem,
 } from '../base/dropdown/index';
 import * as models from '../../../models';
-import { hotKeyRefs } from '../../../common/hotkeys';
+import * as hotkeys from '../../../common/hotkeys';
 
 @autobind
 class RequestActionsDropdown extends PureComponent {
@@ -44,7 +44,6 @@ class RequestActionsDropdown extends PureComponent {
     const {
       request, // eslint-disable-line no-unused-vars
       handleShowSettings,
-      hotKeyRegistry,
       ...other
     } = this.props;
 
@@ -55,13 +54,11 @@ class RequestActionsDropdown extends PureComponent {
         </DropdownButton>
         <DropdownItem onClick={this._handleDuplicate}>
           <i className="fa fa-copy" /> Duplicate
-          <DropdownHint keyBindings={hotKeyRegistry[hotKeyRefs.REQUEST_SHOW_DUPLICATE.id]} />
+          <DropdownHint hotkey={hotkeys.DUPLICATE_REQUEST} />
         </DropdownItem>
         <DropdownItem onClick={this._handleGenerateCode}>
           <i className="fa fa-code" /> Generate Code
-          <DropdownHint
-            keyBindings={hotKeyRegistry[hotKeyRefs.REQUEST_SHOW_GENERATE_CODE_EDITOR.id]}
-          />
+          <DropdownHint hotkey={hotkeys.GENERATE_CODE} />
         </DropdownItem>
         <DropdownItem onClick={this._handleCopyAsCurl}>
           <i className="fa fa-copy" /> Copy as Curl
@@ -74,7 +71,7 @@ class RequestActionsDropdown extends PureComponent {
 
         <DropdownItem onClick={handleShowSettings}>
           <i className="fa fa-wrench" /> Settings
-          <DropdownHint keyBindings={hotKeyRegistry[hotKeyRefs.REQUEST_SHOW_SETTINGS.id]} />
+          <DropdownHint hotkey={hotkeys.SHOW_REQUEST_SETTINGS} />
         </DropdownItem>
       </Dropdown>
     );
@@ -87,7 +84,6 @@ RequestActionsDropdown.propTypes = {
   handleCopyAsCurl: PropTypes.func.isRequired,
   handleShowSettings: PropTypes.func.isRequired,
   request: PropTypes.object.isRequired,
-  hotKeyRegistry: PropTypes.object.isRequired,
 };
 
 export default RequestActionsDropdown;

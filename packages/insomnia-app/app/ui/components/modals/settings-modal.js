@@ -137,7 +137,7 @@ class SettingsModal extends PureComponent {
               <Theme handleChangeTheme={this._handleChangeTheme} activeTheme={settings.theme} />
             </TabPanel>
             <TabPanel className="react-tabs__tab-panel pad scrollable">
-              <SettingsShortcuts hotKeyRegistry={settings.hotKeyRegistry} />
+              <SettingsShortcuts />
             </TabPanel>
             <TabPanel className="react-tabs__tab-panel pad scrollable">
               <Account />

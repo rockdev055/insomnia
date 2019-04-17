@@ -31,7 +31,7 @@ module.exports.templateTags = [
             description: 'fully qualified URL',
           },
           {
-            displayName: 'Query Parameter',
+            displayName: 'Query Paramter',
             value: 'parameter',
             description: 'query parameter by name',
           },

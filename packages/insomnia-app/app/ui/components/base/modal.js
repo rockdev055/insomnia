@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import autobind from 'autobind-decorator';
 import classnames from 'classnames';
 import KeydownBinder from '../keydown-binder';
-import { hotKeyRefs } from '../../../common/hotkeys';
-import { pressedHotKey } from '../../../common/hotkeys-listener';
+import * as hotkeys from '../../../common/hotkeys';
 
 // Keep global z-index reference so that every modal will
 // appear over top of an existing one.
@@ -22,7 +21,7 @@ class Modal extends PureComponent {
     };
   }
 
-  async _handleKeyDown(e) {
+  _handleKeyDown(e) {
     if (!this.state.open) {
       return;
     }
@@ -33,7 +32,7 @@ class Modal extends PureComponent {
     }
 
     const closeOnKeyCodes = this.props.closeOnKeyCodes || [];
-    const pressedEscape = await pressedHotKey(e, hotKeyRefs.CLOSE_MODAL);
+    const pressedEscape = hotkeys.pressedHotKey(e, hotkeys.CLOSE_MODAL);
     const pressedCloseButton = closeOnKeyCodes.find(c => c === e.keyCode);
 
     // Pressed escape

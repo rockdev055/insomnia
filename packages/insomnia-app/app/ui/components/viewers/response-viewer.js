@@ -16,9 +16,8 @@ import {
   PREVIEW_MODE_FRIENDLY,
   PREVIEW_MODE_RAW,
 } from '../../../common/constants';
+import * as hotkeys from '../../../common/hotkeys';
 import KeydownBinder from '../keydown-binder';
-import { executeHotKey } from '../../../common/hotkeys-listener';
-import { hotKeyRefs } from '../../../common/hotkeys';
 
 let alwaysShowLargeResponses = false;
 
@@ -181,7 +180,7 @@ class ResponseViewer extends React.Component<Props, State> {
       return;
     }
 
-    executeHotKey(e, hotKeyRefs.RESPONSE_FOCUS, () => {
+    hotkeys.executeHotKey(e, hotkeys.FOCUS_RESPONSE, () => {
       if (!this._isViewSelectable()) {
         return;
       }

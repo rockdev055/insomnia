@@ -1,6 +1,6 @@
 /**
  * @description
- * HTTP code snippet generator for jQuery
+ * HTTP code snippet generator for native XMLHttpRequest
  *
  * @author
  * @AhmadNassri
