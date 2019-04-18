@@ -37,7 +37,9 @@ module.exports = {
         foreground: {
           default: '#444',
         },
-        highlight: {},
+        highlight: {
+          default: '#888',
+        },
       },
       paneHeader: {
         background: {
