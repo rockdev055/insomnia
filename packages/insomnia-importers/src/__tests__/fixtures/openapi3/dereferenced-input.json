@@ -25,9 +25,7 @@
   "paths": {
     "/pet": {
       "post": {
-        "tags": [
-          "pet"
-        ],
+        "tags": ["pet"],
         "summary": "Add a new pet to the store",
         "operationId": "addPet",
         "requestBody": {
@@ -35,10 +33,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "name",
-                  "photoUrls"
-                ],
+                "required": ["name", "photoUrls"],
                 "type": "object",
                 "properties": {
                   "id": {
@@ -99,11 +94,7 @@
                   "status": {
                     "type": "string",
                     "description": "pet status in the store",
-                    "enum": [
-                      "available",
-                      "pending",
-                      "sold"
-                    ]
+                    "enum": ["available", "pending", "sold"]
                   }
                 },
                 "xml": {
@@ -113,10 +104,7 @@
             },
             "application/xml": {
               "schema": {
-                "required": [
-                  "name",
-                  "photoUrls"
-                ],
+                "required": ["name", "photoUrls"],
                 "type": "object",
                 "properties": {
                   "id": {
@@ -177,11 +165,7 @@
                   "status": {
                     "type": "string",
                     "description": "pet status in the store",
-                    "enum": [
-                      "available",
-                      "pending",
-                      "sold"
-                    ]
+                    "enum": ["available", "pending", "sold"]
                   }
                 },
                 "xml": {
@@ -200,17 +184,12 @@
         },
         "security": [
           {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
+            "petstore_auth": ["write:pets", "read:pets"]
           }
         ]
       },
       "put": {
-        "tags": [
-          "pet"
-        ],
+        "tags": ["pet"],
         "summary": "Update an existing pet",
         "operationId": "updatePet",
         "requestBody": {
@@ -218,10 +197,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "name",
-                  "photoUrls"
-                ],
+                "required": ["name", "photoUrls"],
                 "type": "object",
                 "properties": {
                   "id": {
@@ -282,11 +258,7 @@
                   "status": {
                     "type": "string",
                     "description": "pet status in the store",
-                    "enum": [
-                      "available",
-                      "pending",
-                      "sold"
-                    ]
+                    "enum": ["available", "pending", "sold"]
                   }
                 },
                 "xml": {
@@ -296,10 +268,7 @@
             },
             "application/xml": {
               "schema": {
-                "required": [
-                  "name",
-                  "photoUrls"
-                ],
+                "required": ["name", "photoUrls"],
                 "type": "object",
                 "properties": {
                   "id": {
@@ -360,11 +329,7 @@
                   "status": {
                     "type": "string",
                     "description": "pet status in the store",
-                    "enum": [
-                      "available",
-                      "pending",
-                      "sold"
-                    ]
+                    "enum": ["available", "pending", "sold"]
                   }
                 },
                 "xml": {
@@ -391,19 +356,14 @@
         },
         "security": [
           {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
+            "petstore_auth": ["write:pets", "read:pets"]
           }
         ]
       }
     },
     "/pet/findByStatus": {
       "get": {
-        "tags": [
-          "pet"
-        ],
+        "tags": ["pet"],
         "summary": "Finds Pets by status",
         "description": "Multiple status values can be provided with comma separated strings",
         "operationId": "findPetsByStatus",
@@ -420,11 +380,7 @@
               "items": {
                 "type": "string",
                 "default": "available",
-                "enum": [
-                  "available",
-                  "pending",
-                  "sold"
-                ]
+                "enum": ["available", "pending", "sold"]
               }
             }
           }
@@ -437,10 +393,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "required": [
-                      "name",
-                      "photoUrls"
-                    ],
+                    "required": ["name", "photoUrls"],
                     "type": "object",
                     "properties": {
                       "photoUrls": {
@@ -501,11 +454,7 @@
                       "status": {
                         "type": "string",
                         "description": "pet status in the store",
-                        "enum": [
-                          "available",
-                          "pending",
-                          "sold"
-                        ]
+                        "enum": ["available", "pending", "sold"]
                       }
                     },
                     "xml": {
@@ -518,10 +467,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "required": [
-                      "name",
-                      "photoUrls"
-                    ],
+                    "required": ["name", "photoUrls"],
                     "type": "object",
                     "properties": {
                       "photoUrls": {
@@ -582,11 +528,7 @@
                       "status": {
                         "type": "string",
                         "description": "pet status in the store",
-                        "enum": [
-                          "available",
-                          "pending",
-                          "sold"
-                        ]
+                        "enum": ["available", "pending", "sold"]
                       }
                     },
                     "xml": {
@@ -604,19 +546,14 @@
         },
         "security": [
           {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
+            "petstore_auth": ["write:pets", "read:pets"]
           }
         ]
       }
     },
     "/pet/findByTags": {
       "get": {
-        "tags": [
-          "pet"
-        ],
+        "tags": ["pet"],
         "summary": "Finds Pets by tags",
         "description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
         "operationId": "findPetsByTags",
@@ -644,10 +581,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "required": [
-                      "name",
-                      "photoUrls"
-                    ],
+                    "required": ["name", "photoUrls"],
                     "type": "object",
                     "properties": {
                       "photoUrls": {
@@ -708,11 +642,7 @@
                       "status": {
                         "type": "string",
                         "description": "pet status in the store",
-                        "enum": [
-                          "available",
-                          "pending",
-                          "sold"
-                        ]
+                        "enum": ["available", "pending", "sold"]
                       }
                     },
                     "xml": {
@@ -725,10 +655,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "required": [
-                      "name",
-                      "photoUrls"
-                    ],
+                    "required": ["name", "photoUrls"],
                     "type": "object",
                     "properties": {
                       "photoUrls": {
@@ -789,11 +716,7 @@
                       "status": {
                         "type": "string",
                         "description": "pet status in the store",
-                        "enum": [
-                          "available",
-                          "pending",
-                          "sold"
-                        ]
+                        "enum": ["available", "pending", "sold"]
                       }
                     },
                     "xml": {
@@ -812,19 +735,14 @@
         "deprecated": true,
         "security": [
           {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
+            "petstore_auth": ["write:pets", "read:pets"]
           }
         ]
       }
     },
     "/pet/{petId}": {
       "get": {
-        "tags": [
-          "pet"
-        ],
+        "tags": ["pet"],
         "summary": "Find pet by ID",
         "description": "Returns a single pet",
         "operationId": "getPetById",
@@ -846,10 +764,7 @@
             "content": {
               "application/xml": {
                 "schema": {
-                  "required": [
-                    "name",
-                    "photoUrls"
-                  ],
+                  "required": ["name", "photoUrls"],
                   "type": "object",
                   "properties": {
                     "photoUrls": {
@@ -910,21 +825,14 @@
                     "status": {
                       "type": "string",
                       "description": "pet status in the store",
-                      "enum": [
-                        "available",
-                        "pending",
-                        "sold"
-                      ]
+                      "enum": ["available", "pending", "sold"]
                     }
                   }
                 }
               },
               "application/json": {
                 "schema": {
-                  "required": [
-                    "name",
-                    "photoUrls"
-                  ],
+                  "required": ["name", "photoUrls"],
                   "type": "object",
                   "properties": {
                     "photoUrls": {
@@ -985,11 +893,7 @@
                     "status": {
                       "type": "string",
                       "description": "pet status in the store",
-                      "enum": [
-                        "available",
-                        "pending",
-                        "sold"
-                      ]
+                      "enum": ["available", "pending", "sold"]
                     }
                   }
                 }
@@ -1012,9 +916,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "pet"
-        ],
+        "tags": ["pet"],
         "summary": "Updates a pet in the store with form data",
         "operationId": "updatePetWithForm",
         "parameters": [
@@ -1055,17 +957,12 @@
         },
         "security": [
           {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
+            "petstore_auth": ["write:pets", "read:pets"]
           }
         ]
       },
       "delete": {
-        "tags": [
-          "pet"
-        ],
+        "tags": ["pet"],
         "summary": "Deletes a pet",
         "operationId": "deletePet",
         "parameters": [
@@ -1099,19 +996,14 @@
         },
         "security": [
           {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
+            "petstore_auth": ["write:pets", "read:pets"]
           }
         ]
       }
     },
     "/pet/{petId}/uploadImage": {
       "post": {
-        "tags": [
-          "pet"
-        ],
+        "tags": ["pet"],
         "summary": "uploads an image",
         "operationId": "uploadFile",
         "parameters": [
@@ -1171,19 +1063,14 @@
         },
         "security": [
           {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
+            "petstore_auth": ["write:pets", "read:pets"]
           }
         ]
       }
     },
     "/store/inventory": {
       "get": {
-        "tags": [
-          "store"
-        ],
+        "tags": ["store"],
         "summary": "Returns pet inventories by status",
         "description": "Returns a map of status codes to quantities",
         "operationId": "getInventory",
@@ -1212,9 +1099,7 @@
     },
     "/store/order": {
       "post": {
-        "tags": [
-          "store"
-        ],
+        "tags": ["store"],
         "summary": "Place an order for a pet",
         "operationId": "placeOrder",
         "requestBody": {
@@ -1243,11 +1128,7 @@
                   "status": {
                     "type": "string",
                     "description": "Order Status",
-                    "enum": [
-                      "placed",
-                      "approved",
-                      "delivered"
-                    ]
+                    "enum": ["placed", "approved", "delivered"]
                   },
                   "complete": {
                     "type": "boolean",
@@ -1293,11 +1174,7 @@
                     "status": {
                       "type": "string",
                       "description": "Order Status",
-                      "enum": [
-                        "placed",
-                        "approved",
-                        "delivered"
-                      ]
+                      "enum": ["placed", "approved", "delivered"]
                     }
                   }
                 }
@@ -1329,11 +1206,7 @@
                     "status": {
                       "type": "string",
                       "description": "Order Status",
-                      "enum": [
-                        "placed",
-                        "approved",
-                        "delivered"
-                      ]
+                      "enum": ["placed", "approved", "delivered"]
                     }
                   }
                 }
@@ -1349,9 +1222,7 @@
     },
     "/store/order/{orderId}": {
       "get": {
-        "tags": [
-          "store"
-        ],
+        "tags": ["store"],
         "summary": "Find purchase order by ID",
         "description": "For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
         "operationId": "getOrderById",
@@ -1400,11 +1271,7 @@
                     "status": {
                       "type": "string",
                       "description": "Order Status",
-                      "enum": [
-                        "placed",
-                        "approved",
-                        "delivered"
-                      ]
+                      "enum": ["placed", "approved", "delivered"]
                     }
                   }
                 }
@@ -1436,11 +1303,7 @@
                     "status": {
                       "type": "string",
                       "description": "Order Status",
-                      "enum": [
-                        "placed",
-                        "approved",
-                        "delivered"
-                      ]
+                      "enum": ["placed", "approved", "delivered"]
                     }
                   }
                 }
@@ -1458,9 +1321,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "store"
-        ],
+        "tags": ["store"],
         "summary": "Delete purchase order by ID",
         "description": "For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors",
         "operationId": "deleteOrder",
@@ -1491,9 +1352,7 @@
     },
     "/user": {
       "post": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Create user",
         "description": "This can only be done by the logged in user.",
         "operationId": "createUser",
@@ -1550,9 +1409,7 @@
     },
     "/user/createWithArray": {
       "post": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Creates list of users with given input array",
         "operationId": "createUsersWithArrayInput",
         "requestBody": {
@@ -1611,9 +1468,7 @@
     },
     "/user/createWithList": {
       "post": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Creates list of users with given input array",
         "operationId": "createUsersWithListInput",
         "requestBody": {
@@ -1672,9 +1527,7 @@
     },
     "/user/login": {
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Logs user into the system",
         "operationId": "loginUser",
         "parameters": [
@@ -1738,9 +1591,7 @@
     },
     "/user/logout": {
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Logs out current logged in user session",
         "operationId": "logoutUser",
         "responses": {
@@ -1753,9 +1604,7 @@
     },
     "/user/{username}": {
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Get user by user name",
         "operationId": "getUserByName",
         "parameters": [
@@ -1854,9 +1703,7 @@
         }
       },
       "put": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Updated user",
         "description": "This can only be done by the logged in user.",
         "operationId": "updateUser",
@@ -1926,9 +1773,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Delete user",
         "description": "This can only be done by the logged in user.",
         "operationId": "deleteUser",
@@ -1980,11 +1825,7 @@
           "status": {
             "type": "string",
             "description": "Order Status",
-            "enum": [
-              "placed",
-              "approved",
-              "delivered"
-            ]
+            "enum": ["placed", "approved", "delivered"]
           },
           "complete": {
             "type": "boolean",
@@ -2061,10 +1902,7 @@
         }
       },
       "Pet": {
-        "required": [
-          "name",
-          "photoUrls"
-        ],
+        "required": ["name", "photoUrls"],
         "type": "object",
         "properties": {
           "id": {
@@ -2125,11 +1963,7 @@
           "status": {
             "type": "string",
             "description": "pet status in the store",
-            "enum": [
-              "available",
-              "pending",
-              "sold"
-            ]
+            "enum": ["available", "pending", "sold"]
           }
         },
         "xml": {

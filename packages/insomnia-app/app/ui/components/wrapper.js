@@ -56,6 +56,7 @@ import type { Environment } from '../../models/environment';
 import ErrorBoundary from './error-boundary';
 import type { ClientCertificate } from '../../models/client-certificate';
 import MoveRequestGroupModal from './modals/move-request-group-modal';
+import ExportRequestsModal from './modals/export-requests-modal';
 import VCS from '../../sync/vcs';
 import type { StatusCandidate } from '../../sync/types';
 
@@ -67,6 +68,8 @@ type Props = {
   handleImportFileToWorkspace: Function,
   handleImportUriToWorkspace: Function,
   handleExportFile: Function,
+  handleShowExportRequestsModal: Function,
+  handleExportRequestsToFile: Function,
   handleSetActiveWorkspace: Function,
   handleSetActiveEnvironment: Function,
   handleMoveDoc: Function,
@@ -255,10 +258,6 @@ class Wrapper extends React.PureComponent<Props, State> {
     this.props.handleImportUriToWorkspace(this.props.activeWorkspace._id, uri);
   }
 
-  _handleExportWorkspaceToFile(): void {
-    this.props.handleExportFile(this.props.activeWorkspace._id);
-  }
-
   _handleSetActiveResponse(responseId: string | null): void {
     if (!this.props.activeRequest) {
       console.warn('Tried to set active response when request not active');
@@ -384,6 +383,8 @@ class Wrapper extends React.PureComponent<Props, State> {
       handleDuplicateRequestGroup,
       handleMoveRequestGroup,
       handleExportFile,
+      handleShowExportRequestsModal,
+      handleExportRequestsToFile,
       handleMoveDoc,
       handleResetDragPaneHorizontal,
       handleResetDragPaneVertical,
@@ -535,7 +536,7 @@ class Wrapper extends React.PureComponent<Props, State> {
 
           <SettingsModal
             ref={registerModal}
-            handleExportWorkspaceToFile={this._handleExportWorkspaceToFile}
+            handleShowExportRequestsModal={handleShowExportRequestsModal}
             handleExportAllToFile={handleExportFile}
             handleImportFile={this._handleImportFile}
             handleImportUri={this._handleImportUri}
@@ -607,6 +608,12 @@ class Wrapper extends React.PureComponent<Props, State> {
             getRenderContext={handleGetRenderContext}
             nunjucksPowerUserMode={settings.nunjucksPowerUserMode}
             isVariableUncovered={isVariableUncovered}
+          />
+
+          <ExportRequestsModal
+            ref={registerModal}
+            childObjects={sidebarChildren}
+            handleExportRequestsToFile={handleExportRequestsToFile}
           />
         </ErrorBoundary>
       </div>,

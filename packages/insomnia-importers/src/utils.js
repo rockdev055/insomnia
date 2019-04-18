@@ -61,4 +61,4 @@ module.exports.unthrowableParseJson = function(rawData) {
   } catch (err) {
     return null;
   }
-}
+};

@@ -456,7 +456,8 @@ class OAuth2Auth extends React.PureComponent<Props, State> {
 
     return (
       <span>
-        &#x28;expires <TimeFromNow timestamp={token.expiresAt} />&#x29;
+        &#x28;expires <TimeFromNow timestamp={token.expiresAt} />
+        &#x29;
       </span>
     );
   }
@@ -586,8 +587,8 @@ class OAuth2Auth extends React.PureComponent<Props, State> {
                   ? 'Refreshing...'
                   : 'Fetching...'
                 : tok
-                  ? 'Refresh Token'
-                  : 'Fetch Tokens'}
+                ? 'Refresh Token'
+                : 'Fetch Tokens'}
             </button>
           </div>
         </div>

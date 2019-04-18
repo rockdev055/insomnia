@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const SwaggerParser = require('swagger-parser');
 const URL = require('url').URL;
@@ -65,7 +65,7 @@ module.exports.convert = async function(rawData) {
   const endpoints = parseEndpoints(api);
 
   return [workspace, baseEnv, openapiEnv, ...endpoints];
-}
+};
 
 /**
  * Parse string data into openapi 3 object (https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#oasObject)

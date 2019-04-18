@@ -5,21 +5,21 @@ info:
     name: MIT
   version: 1.0.0
 servers:
-- url: http://petstore.swagger.io/v1
+  - url: http://petstore.swagger.io/v1
 paths:
   /pets:
     get:
       tags:
-      - pets
+        - pets
       summary: List all pets
       operationId: listPets
       parameters:
-      - name: limit
-        in: query
-        description: How many items to return at one time (max 100)
-        schema:
-          type: integer
-          format: int32
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          schema:
+            type: integer
+            format: int32
       responses:
         200:
           description: A paged array of pets
@@ -40,7 +40,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     post:
       tags:
-      - pets
+        - pets
       summary: Create a pet
       operationId: createPets
       responses:
@@ -56,16 +56,16 @@ paths:
   /pets/{petId}:
     get:
       tags:
-      - pets
+        - pets
       summary: Info for a specific pet
       operationId: showPetById
       parameters:
-      - name: petId
-        in: path
-        description: The id of the pet to retrieve
-        required: true
-        schema:
-          type: string
+        - name: petId
+          in: path
+          description: The id of the pet to retrieve
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: Expected response to a valid request
@@ -87,8 +87,8 @@ components:
         $ref: '#/components/schemas/Pet'
     Error:
       required:
-      - code
-      - message
+        - code
+        - message
       type: object
       properties:
         code:
@@ -98,8 +98,8 @@ components:
           type: string
     Pet:
       required:
-      - id
-      - name
+        - id
+        - name
       type: object
       properties:
         id:

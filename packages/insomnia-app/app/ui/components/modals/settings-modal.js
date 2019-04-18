@@ -43,8 +43,8 @@ class SettingsModal extends PureComponent {
     this.modal.hide();
   }
 
-  _handleExportWorkspace() {
-    this.props.handleExportWorkspaceToFile();
+  _handleShowExportRequestsModal() {
+    this.props.handleShowExportRequestsModal();
     this.modal.hide();
   }
 
@@ -128,7 +128,7 @@ class SettingsModal extends PureComponent {
             <TabPanel className="react-tabs__tab-panel pad scrollable">
               <ImportExport
                 handleExportAll={this._handleExportAllToFile}
-                handleExportWorkspace={this._handleExportWorkspace}
+                handleShowExportRequestsModal={this._handleShowExportRequestsModal}
                 handleImportFile={this._handleImportFile}
                 handleImportUri={this._handleImportUri}
               />
@@ -157,7 +157,7 @@ class SettingsModal extends PureComponent {
 
 SettingsModal.propTypes = {
   // Functions
-  handleExportWorkspaceToFile: PropTypes.func.isRequired,
+  handleShowExportRequestsModal: PropTypes.func.isRequired,
   handleExportAllToFile: PropTypes.func.isRequired,
   handleImportFile: PropTypes.func.isRequired,
   handleImportUri: PropTypes.func.isRequired,

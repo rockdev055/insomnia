@@ -69,6 +69,7 @@ import AskModal from '../components/modals/ask-modal';
 import { updateMimeType } from '../../models/request';
 import MoveRequestGroupModal from '../components/modals/move-request-group-modal';
 import * as themes from '../../plugins/misc';
+import ExportRequestsModal from '../components/modals/export-requests-modal';
 import FileSystemDriver from '../../sync/store/drivers/file-system-driver';
 import VCS from '../../sync/vcs';
 import SyncMergeModal from '../components/modals/sync-merge-modal';
@@ -766,6 +767,10 @@ class App extends PureComponent {
     await this._handleSetSidebarHidden(sidebarHidden);
   }
 
+  _handleShowExportRequestsModal() {
+    showModal(ExportRequestsModal);
+  }
+
   _setWrapperRef(n) {
     this._wrapper = n;
   }
@@ -1058,6 +1063,7 @@ class App extends PureComponent {
               handleSetSidebarFilter={this._handleSetSidebarFilter}
               handleToggleMenuBar={this._handleToggleMenuBar}
               handleUpdateRequestMimeType={this._handleUpdateRequestMimeType}
+              handleShowExportRequestsModal={this._handleShowExportRequestsModal}
               isVariableUncovered={isVariableUncovered}
               vcs={vcs}
             />
@@ -1189,7 +1195,8 @@ function mapDispatchToProps(dispatch) {
     handleImportFileToWorkspace: global.importFile,
     handleImportUriToWorkspace: global.importUri,
     handleCommand: global.newCommand,
-    handleExportFile: global.exportFile,
+    handleExportFile: global.exportWorkspacesToFile,
+    handleExportRequestsToFile: global.exportRequestsToFile,
     handleMoveDoc: _moveDoc,
   };
 }

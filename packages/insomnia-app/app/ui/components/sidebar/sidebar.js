@@ -130,15 +130,14 @@ class Sidebar extends PureComponent {
           hotKeyRegistry={hotKeyRegistry}
         />
 
-        {enableSyncBeta &&
-          vcs && (
-            <SyncDropdown
-              className="sidebar__footer"
-              workspace={workspace}
-              vcs={vcs}
-              syncItems={syncItems}
-            />
-          )}
+        {enableSyncBeta && vcs && (
+          <SyncDropdown
+            className="sidebar__footer"
+            workspace={workspace}
+            vcs={vcs}
+            syncItems={syncItems}
+          />
+        )}
 
         {!enableSyncBeta && (
           <SyncLegacyDropdown
