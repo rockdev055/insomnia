@@ -102,7 +102,6 @@ export function createWindow() {
         : []),
       {
         label: `${MNEMONIC_SYM}Preferences`,
-        accelerator: 'CmdOrCtrl+,',
         click: function(menuItem, window, e) {
           if (!window || !window.webContents) {
             return;
@@ -187,18 +186,6 @@ export function createWindow() {
           const zoomFactor = Math.max(0.5, getZoomFactor() - 0.05);
           w.webContents.setZoomFactor(zoomFactor);
           saveZoomFactor(zoomFactor);
-        },
-      },
-      {
-        label: `Toggle ${MNEMONIC_SYM}Sidebar`,
-        accelerator: 'CmdOrCtrl+\\',
-        click: () => {
-          const w = BrowserWindow.getFocusedWindow();
-          if (!w || !w.webContents) {
-            return;
-          }
-
-          w.webContents.send('toggle-sidebar');
         },
       },
       {
@@ -319,7 +306,6 @@ export function createWindow() {
     submenu: [
       {
         label: `${MNEMONIC_SYM}Reload Plugins`,
-        accelerator: 'CmdOrCtrl+Shift+R',
         click: () => {
           const w = BrowserWindow.getFocusedWindow();
           if (!w || !w.webContents) {

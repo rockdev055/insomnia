@@ -11,7 +11,7 @@ import FilterHelpModal from '../modals/filter-help-modal';
 import * as misc from '../../../common/misc';
 import prettify from 'insomnia-prettify';
 import { DEBOUNCE_MILLIS, EDITOR_KEY_MAP_VIM, isMac } from '../../../common/constants';
-import keyCodes from '../../../common/keycodes';
+import { keyboardKeys as keyCodes } from '../../../common/keyboard-keys';
 import './base-imports';
 import { getTagDefinitions } from '../../../templating/index';
 import Dropdown from '../base/dropdown/dropdown';
@@ -672,7 +672,7 @@ class CodeEditor extends React.Component {
     const { keyCode } = event;
 
     const isVimKeyMap = keyMap === EDITOR_KEY_MAP_VIM;
-    const pressedEscape = keyCode === keyCodes.esc;
+    const pressedEscape = keyCode === keyCodes.esc.keyCode;
 
     if (isVimKeyMap && pressedEscape) {
       event.stopPropagation();

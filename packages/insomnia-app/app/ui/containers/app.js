@@ -108,6 +108,12 @@ class App extends PureComponent {
   _setGlobalKeyMap() {
     this._globalKeyMap = [
       [
+        hotKeyRefs.PREFERENCES_SHOW_GENERAL,
+        () => {
+          showModal(SettingsModal);
+        },
+      ],
+      [
         hotKeyRefs.PREFERENCES_SHOW_KEYBOARD_SHORTCUTS,
         () => {
           showModal(SettingsModal, TAB_INDEX_SHORTCUTS);
@@ -200,6 +206,8 @@ class App extends PureComponent {
           await this._requestDuplicate(this.props.activeRequest);
         },
       ],
+      [hotKeyRefs.SIDEBAR_TOGGLE, this._handleToggleSidebar],
+      [hotKeyRefs.PLUGIN_RELOAD, this._handleReloadPlugins],
       [
         hotKeyRefs.ENVIRONMENT_UNCOVER_VARIABLES,
         async () => {
@@ -775,6 +783,14 @@ class App extends PureComponent {
     this._wrapper = n;
   }
 
+  async _handleReloadPlugins() {
+    const { settings } = this.props;
+    await plugins.getPlugins(true);
+    templating.reload();
+    themes.setTheme(settings.theme);
+    console.log('[plugins] reloaded');
+  }
+
   /**
    * Update document.title to be "Workspace (Environment) – Request"
    * @private
@@ -881,13 +897,7 @@ class App extends PureComponent {
       showModal(SettingsModal);
     });
 
-    ipcRenderer.on('reload-plugins', async () => {
-      const { settings } = this.props;
-      await plugins.getPlugins(true);
-      templating.reload();
-      themes.setTheme(settings.theme);
-      console.log('[plugins] reloaded');
-    });
+    ipcRenderer.on('reload-plugins', this._handleReloadPlugins);
 
     ipcRenderer.on('toggle-preferences-shortcuts', () => {
       showModal(SettingsModal, TAB_INDEX_SHORTCUTS);

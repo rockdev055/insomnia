@@ -56,6 +56,7 @@ import type { Environment } from '../../models/environment';
 import ErrorBoundary from './error-boundary';
 import type { ClientCertificate } from '../../models/client-certificate';
 import MoveRequestGroupModal from './modals/move-request-group-modal';
+import AddKeyCombinationModal from './modals/add-key-combination-modal';
 import ExportRequestsModal from './modals/export-requests-modal';
 import VCS from '../../sync/vcs';
 import type { StatusCandidate } from '../../sync/types';
@@ -610,6 +611,7 @@ class Wrapper extends React.PureComponent<Props, State> {
             isVariableUncovered={isVariableUncovered}
           />
 
+          <AddKeyCombinationModal ref={registerModal} />
           <ExportRequestsModal
             ref={registerModal}
             childObjects={sidebarChildren}
