@@ -2,7 +2,6 @@ import * as models from '../../models';
 import * as importUtil from '../import';
 import { getAppVersion } from '../constants';
 import { globalBeforeEach } from '../../__jest__/before-each';
-import YAML from 'yaml';
 
 describe('exportHAR()', () => {
   beforeEach(globalBeforeEach);
@@ -157,7 +156,7 @@ describe('exportHAR()', () => {
   });
 });
 
-describe('exportYAML()', () => {
+describe('exportJSON()', () => {
   beforeEach(globalBeforeEach);
   it('exports all workspaces', async () => {
     const w = await models.workspace.create({ name: 'Workspace' });
@@ -177,11 +176,11 @@ describe('exportYAML()', () => {
       parentId: eBase._id,
     });
 
-    const yaml = await importUtil.exportYAML();
-    const data = YAML.parse(yaml);
+    const json = await importUtil.exportJSON();
+    const data = JSON.parse(json);
 
     expect(data._type).toBe('export');
-    expect(data.__export_format).toBe(4);
+    expect(data.__export_format).toBe(3);
     expect(data.__export_date).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/);
     expect(data.__export_source).toBe(`insomnia.desktop.app:v${getAppVersion()}`);
     expect(data.resources[0]._id).toBe(w._id);
