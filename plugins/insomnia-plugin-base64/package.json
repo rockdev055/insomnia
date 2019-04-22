@@ -15,6 +15,5 @@
   },
   "scripts": {
     "test": "jest --silent"
-  },
-  "dependencies": {}
+  }
 }

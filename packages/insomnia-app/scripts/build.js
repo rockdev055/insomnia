@@ -25,9 +25,8 @@ module.exports.start = async function() {
   await emptyDir('../build');
 
   // Build the things
-  console.log('[build] Building Webpack renderer');
+  console.log('[build] Building Webpack');
   await buildWebpack(configRenderer);
-  console.log('[build] Building Webpack main');
   await buildWebpack(configMain);
 
   // Copy necessary files
@@ -49,10 +48,8 @@ module.exports.start = async function() {
 async function buildWebpack(config) {
   return new Promise((resolve, reject) => {
     webpack(config, (err, stats) => {
-      if (err) {
+      if (err || stats.hasErrors()) {
         reject(err);
-      } else if (stats.hasErrors()) {
-        reject(new Error('Failed to build webpack'));
       } else {
         resolve();
       }
