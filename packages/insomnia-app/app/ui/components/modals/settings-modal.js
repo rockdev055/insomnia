@@ -82,7 +82,7 @@ class SettingsModal extends PureComponent {
   render() {
     const { settings } = this.props;
     const { currentTabIndex } = this.state;
-    const email = session.isLoggedIn() ? session.getFullName() : null;
+    const email = session.isLoggedIn() ? session.getEmail() : null;
 
     return (
       <Modal ref={this._setModalRef} tall freshState {...this.props}>
