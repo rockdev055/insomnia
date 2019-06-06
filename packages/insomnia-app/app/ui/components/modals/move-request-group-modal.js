@@ -55,8 +55,6 @@ class MoveRequestGroupModal extends React.PureComponent<Props, State> {
       parentId: selectedWorkspaceId,
       name: requestGroup.name, // Because duplicating will add (Copy) suffix
     });
-
-    await models.requestGroup.remove(requestGroup);
     this.hide();
   }
 

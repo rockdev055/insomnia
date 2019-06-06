@@ -105,7 +105,6 @@ type Props = {
   handleSendRequestWithEnvironment: Function,
   handleSendAndDownloadRequestWithEnvironment: Function,
   handleUpdateRequestMimeType: Function,
-  handleUpdateDownloadPath: Function,
 
   // Properties
   loadStartTime: number,
@@ -115,7 +114,6 @@ type Props = {
   responsePreviewMode: string,
   responseFilter: string,
   responseFilterHistory: Array<string>,
-  responseDownloadPath: string | null,
   sidebarWidth: number,
   sidebarHidden: boolean,
   sidebarFilter: string,
@@ -416,7 +414,6 @@ class Wrapper extends React.PureComponent<Props, State> {
       handleStartDragPaneVertical,
       handleToggleMenuBar,
       handleUpdateRequestMimeType,
-      handleUpdateDownloadPath,
       headerEditorKey,
       isLoading,
       isVariableUncovered,
@@ -428,7 +425,6 @@ class Wrapper extends React.PureComponent<Props, State> {
       responseFilter,
       responseFilterHistory,
       responsePreviewMode,
-      responseDownloadPath,
       settings,
       sidebarChildren,
       sidebarFilter,
@@ -718,7 +714,6 @@ class Wrapper extends React.PureComponent<Props, State> {
             handleImportFile={this._handleImportFile}
             request={activeRequest}
             workspace={activeWorkspace}
-            downloadPath={responseDownloadPath}
             settings={settings}
             environmentId={activeEnvironment ? activeEnvironment._id : ''}
             oAuth2Token={oAuth2Token}
@@ -728,7 +723,6 @@ class Wrapper extends React.PureComponent<Props, State> {
             handleImport={this._handleImport}
             handleRender={handleRender}
             handleGetRenderContext={handleGetRenderContext}
-            handleUpdateDownloadPath={handleUpdateDownloadPath}
             updateRequestBody={Wrapper._handleUpdateRequestBody}
             forceUpdateRequestHeaders={this._handleForceUpdateRequestHeaders}
             updateRequestUrl={Wrapper._handleUpdateRequestUrl}

@@ -42,7 +42,6 @@ type Props = {
   handleGenerateCode: Function,
   handleRender: Function,
   handleGetRenderContext: Function,
-  handleUpdateDownloadPath: Function,
   updateRequestUrl: (r: Request, url: string) => Promise<Request>,
   updateRequestMethod: (r: Request, method: string) => Promise<Request>,
   updateRequestBody: (r: Request, body: RequestBody) => Promise<Request>,
@@ -65,7 +64,6 @@ type Props = {
 
   // Optional
   request: ?Request,
-  downloadPath: string | null,
   oAuth2Token: ?OAuth2Token,
 };
 
@@ -155,7 +153,6 @@ class RequestPane extends React.PureComponent<Props> {
       handleRender,
       handleSend,
       handleSendAndDownload,
-      handleUpdateDownloadPath,
       oAuth2Token,
       request,
       workspace,
@@ -170,7 +167,6 @@ class RequestPane extends React.PureComponent<Props> {
       updateRequestMethod,
       updateRequestUrl,
       headerEditorKey,
-      downloadPath,
     } = this.props;
 
     const paneClasses = 'request-pane theme--pane pane';
@@ -269,8 +265,6 @@ class RequestPane extends React.PureComponent<Props> {
               handleGetRenderContext={handleGetRenderContext}
               request={request}
               hotKeyRegistry={settings.hotKeyRegistry}
-              handleUpdateDownloadPath={handleUpdateDownloadPath}
-              downloadPath={downloadPath}
             />
           </ErrorBoundary>
         </header>
