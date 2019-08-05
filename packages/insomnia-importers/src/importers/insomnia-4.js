@@ -1,5 +1,6 @@
 'use strict';
 
+const utils = require('../utils');
 const YAML = require('yaml');
 
 module.exports.id = 'insomnia-4';

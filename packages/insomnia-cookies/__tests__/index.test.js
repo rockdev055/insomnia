@@ -1,5 +1,5 @@
 const { CookieJar } = require('tough-cookie');
-const { jarFromCookies, cookiesFromJar } = require('..');
+const { cookieToString, jarFromCookies, cookiesFromJar } = require('..');
 
 describe('jarFromCookies()', () => {
   it('returns valid cookies', done => {

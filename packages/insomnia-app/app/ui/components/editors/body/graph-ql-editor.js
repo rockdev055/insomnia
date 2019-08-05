@@ -1,11 +1,9 @@
 // @flow
 import classnames from 'classnames';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import autobind from 'autobind-decorator';
 import { markdownToHTML } from '../../../../common/markdown-to-html';
-import type { GraphQLArgument, GraphQLField, GraphQLSchema, GraphQLType } from 'graphql';
-import { parse, print, typeFromAST } from 'graphql';
+import { parse, print, typeFromAST, type Document as DocumentAST } from 'graphql';
 import { introspectionQuery } from 'graphql/utilities/introspectionQuery';
 import { buildClientSchema } from 'graphql/utilities/buildClientSchema';
 import type { CodeMirror, TextMarker } from 'codemirror';
@@ -27,12 +25,6 @@ import { newBodyRaw } from '../../../../models/request';
 import ResponseDebugModal from '../../modals/response-debug-modal';
 import Tooltip from '../../tooltip';
 import { Dropdown, DropdownButton, DropdownDivider, DropdownItem } from '../../base/dropdown';
-import GraphqlExplorer from '../../graph-ql-explorer/graph-ql-explorer';
-
-const explorerContainer = document.querySelector('#graphql-explorer-container');
-if (!explorerContainer) {
-  throw new Error('Failed to find #graphql-explorer-container');
-}
 
 type GraphQLBody = {
   query: string,
@@ -57,7 +49,7 @@ type Props = {
 
 type State = {
   body: GraphQLBody,
-  schema: GraphQLSchema | null,
+  schema: Object | null,
   schemaFetchError: {
     message: string,
     response: ResponsePatch | null,
@@ -67,18 +59,12 @@ type State = {
   hideSchemaFetchErrors: boolean,
   variablesSyntaxError: string,
   automaticFetch: boolean,
-  explorerVisible: boolean,
-  activeReference: null | {
-    type: GraphQLType | null,
-    argument: GraphQLArgument | null,
-    field: GraphQLField<any, any> | null,
-  },
 };
 
 @autobind
 class GraphQLEditor extends React.PureComponent<Props, State> {
   _disabledOperationMarkers: TextMarker[];
-  _documentAST: null | Object;
+  _documentAST: null | DocumentAST;
   _isMounted: boolean;
   _queryEditor: null | CodeMirror;
   _schemaFetchTimeout: TimeoutID;
@@ -106,8 +92,6 @@ class GraphQLEditor extends React.PureComponent<Props, State> {
       schemaIsFetching: false,
       hideSchemaFetchErrors: false,
       variablesSyntaxError: '',
-      activeReference: null,
-      explorerVisible: false,
       automaticFetch,
     };
   }
@@ -156,15 +140,6 @@ class GraphQLEditor extends React.PureComponent<Props, State> {
     }
 
     return operationName;
-  }
-
-  _handleCloseExplorer() {
-    this.setState({ explorerVisible: false });
-  }
-
-  _handleClickReference(reference: Object, e: MouseEvent) {
-    e.preventDefault();
-    this.setState({ explorerVisible: true, activeReference: reference });
   }
 
   _handleQueryFocus() {
@@ -339,12 +314,6 @@ class GraphQLEditor extends React.PureComponent<Props, State> {
     return variableToType;
   }
 
-  _handleShowDocumentation() {
-    this.setState({
-      explorerVisible: true,
-    });
-  }
-
   async _handleRefreshSchema(): Promise<void> {
     await this._fetchAndSetSchema(this.props.request);
   }
@@ -505,11 +474,6 @@ class GraphQLEditor extends React.PureComponent<Props, State> {
     return message;
   }
 
-  static renderMarkdown(text: string) {
-    const html = markdownToHTML(text);
-    return `<div class="markdown-preview__content">${html}</div>`;
-  }
-
   render() {
     const {
       content,
@@ -528,8 +492,6 @@ class GraphQLEditor extends React.PureComponent<Props, State> {
       variablesSyntaxError,
       schemaIsFetching,
       automaticFetch,
-      activeReference,
-      explorerVisible,
     } = this.state;
 
     const { query, variables: variablesObject } = GraphQLEditor._stringToGraphQL(content);
@@ -538,17 +500,6 @@ class GraphQLEditor extends React.PureComponent<Props, State> {
 
     const variableTypes = this._buildVariableTypes(schema);
 
-    // Create portal for GraphQL Explorer
-    const graphQLExplorerPortal = ReactDOM.createPortal(
-      <GraphqlExplorer
-        schema={schema}
-        visible={explorerVisible}
-        reference={activeReference}
-        handleClose={this._handleCloseExplorer}
-      />,
-      explorerContainer,
-    );
-
     return (
       <div className="graphql-editor">
         <Dropdown right className="graphql-editor__schema-dropdown margin-bottom-xs">
@@ -556,9 +507,6 @@ class GraphQLEditor extends React.PureComponent<Props, State> {
             schema <i className="fa fa-wrench" />
           </DropdownButton>
           <DropdownDivider>GraphQL Schema</DropdownDivider>
-          <DropdownItem onClick={this._handleShowDocumentation} disabled={!schema}>
-            <i className="fa fa-file-code-o" /> Show Documentation
-          </DropdownItem>
           <DropdownItem onClick={this._handleRefreshSchema} stayOpenAfterClick>
             <i className={'fa fa-refresh ' + (schemaIsFetching ? 'fa-spin' : '')} /> Refresh Schema
           </DropdownItem>
@@ -584,13 +532,16 @@ class GraphQLEditor extends React.PureComponent<Props, State> {
             }}
             infoOptions={{
               schema: schema || null,
-              renderDescription: GraphQLEditor.renderMarkdown,
-              onClick: this._handleClickReference,
+              renderDescription: text => {
+                const html = markdownToHTML(text);
+                return `<div class="markdown-preview__content">${html}</div>`;
+              },
+              // onClick: reference => console.log('CLICK', reference)
             }}
-            jumpOptions={{
-              schema: schema || null,
-              onClick: this._handleClickReference,
-            }}
+            // jumpOptions={{
+            //   schema: schema || null,
+            //   onClick: reference => console.log('JUMP', reference)
+            // }}
             lintOptions={schema ? { schema } : null}
             fontSize={settings.editorFontSize}
             indentSize={settings.editorIndentSize}
@@ -668,8 +619,6 @@ class GraphQLEditor extends React.PureComponent<Props, State> {
             Prettify GraphQL
           </button>
         </div>
-
-        {graphQLExplorerPortal}
       </div>
     );
   }

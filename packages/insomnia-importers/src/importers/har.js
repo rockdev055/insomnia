@@ -1,5 +1,7 @@
 'use strict';
 
+const utils = require('../utils');
+
 let requestCount = 1;
 
 module.exports.id = 'har';
