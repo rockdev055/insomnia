@@ -10,10 +10,10 @@ export function init(): { import: Object, export: Object } {
   return {
     import: {
       async uri(uri: string, options: { workspaceId?: string } = {}): Promise<void> {
-        await importUri(() => Promise.resolve(options.workspaceId || null), uri);
+        await importUri(options.workspaceId || null, uri);
       },
       async raw(text: string, options: { workspaceId?: string } = {}): Promise<void> {
-        await importRaw(() => Promise.resolve(options.workspaceId || null), text);
+        await importRaw(options.workspaceId || null, text);
       },
     },
     export: {
