@@ -1,5 +1,4 @@
 // @flow
-import * as packageJson from '../../package.json';
 import type { BaseModel } from './index';
 import * as db from '../common/database';
 import { UPDATE_CHANNEL_STABLE } from '../common/constants';
@@ -72,7 +71,7 @@ export function init(): BaseSettings {
     validateSSL: true,
     forceVerticalLayout: false,
     autoHideMenuBar: false,
-    theme: packageJson.app.theme,
+    theme: 'default',
     pluginPath: '',
     nunjucksPowerUserMode: false,
     deviceId: null,

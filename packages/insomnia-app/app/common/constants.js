@@ -18,10 +18,6 @@ export function getAppName() {
   return packageJSON.app.productName;
 }
 
-export function getAppId() {
-  return packageJSON.app.appId;
-}
-
 export function getAppPlatform() {
   return process.platform;
 }

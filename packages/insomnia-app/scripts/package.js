@@ -1,4 +1,3 @@
-const packageJson = require('../package.json');
 const electronBuilder = require('electron-builder');
 const path = require('path');
 const rimraf = require('rimraf');
@@ -39,18 +38,7 @@ module.exports.start = async function() {
 
 async function pkg(relConfigPath) {
   const configPath = path.resolve(__dirname, relConfigPath);
-
-  // Replace some things
-  const rawConfig = fs
-    .readFileSync(configPath, 'utf8')
-    .replace('__APP_ID__', packageJson.app.appId)
-    .replace('__ICON_URL__', packageJson.app.icon)
-    .replace('__EXECUTABLE_NAME__', packageJson.app.executableName)
-    .replace('__SYNOPSIS__', packageJson.app.synopsis);
-
-  // console.log(`[package] Using electron-builder config\n${rawConfig}`);
-
-  const config = JSON.parse(rawConfig);
+  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
   const targetPlatform = PLATFORM_MAP[process.platform];
 
   const target = process.env.BUILD_TARGETS

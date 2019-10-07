@@ -9,7 +9,7 @@ import DropdownItem from '../base/dropdown/dropdown-item';
 import DropdownHint from '../base/dropdown/dropdown-hint';
 import SettingsModal, { TAB_INDEX_EXPORT } from '../modals/settings-modal';
 import * as models from '../../../models';
-import { getAppName, getAppVersion } from '../../../common/constants';
+import { getAppVersion } from '../../../common/constants';
 import { showAlert, showModal, showPrompt } from '../modals';
 import Link from '../base/link';
 import WorkspaceSettingsModal from '../modals/workspace-settings-modal';
@@ -307,9 +307,7 @@ class WorkspaceDropdown extends React.PureComponent<Props, State> {
             </DropdownItem>
           ))}
 
-          <DropdownDivider>
-            {getAppName()} v{getAppVersion()}
-          </DropdownDivider>
+          <DropdownDivider>Insomnia Version {getAppVersion()}</DropdownDivider>
 
           <DropdownItem onClick={WorkspaceDropdown._handleShowSettings}>
             <i className="fa fa-cog" /> Preferences

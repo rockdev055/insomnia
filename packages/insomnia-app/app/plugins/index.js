@@ -1,6 +1,5 @@
 // @flow
 import mkdirp from 'mkdirp';
-import * as packageJson from '../../package.json';
 import * as models from '../models';
 import fs from 'fs';
 import path from 'path';
@@ -52,6 +51,20 @@ export type Theme = {
   plugin: Plugin,
   theme: PluginTheme,
 };
+
+const CORE_PLUGINS = [
+  'insomnia-plugin-base64',
+  'insomnia-plugin-hash',
+  'insomnia-plugin-file',
+  'insomnia-plugin-now',
+  'insomnia-plugin-uuid',
+  'insomnia-plugin-prompt',
+  'insomnia-plugin-request',
+  'insomnia-plugin-response',
+  'insomnia-plugin-jsonpath',
+  'insomnia-plugin-cookie-jar',
+  'insomnia-plugin-core-themes',
+];
 
 let plugins: ?Array<Plugin> = null;
 
@@ -144,7 +157,7 @@ export async function getPlugins(force: boolean = false): Promise<Array<Plugin>>
       // "name": "module"
     };
 
-    for (const p of packageJson.app.plugins) {
+    for (const p of CORE_PLUGINS) {
       const pluginJson = global.require(`${p}/package.json`);
       const pluginModule = global.require(p);
       pluginMap[pluginJson.name] = _initPlugin(pluginJson, pluginModule);
