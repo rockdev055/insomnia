@@ -123,12 +123,7 @@ class SidebarRequestRow extends PureComponent {
                   onEditStart={this._handleEditStart}
                   onSubmit={this._handleRequestUpdateName}
                   renderReadView={(value, props) => (
-                    <Highlight
-                      search={filter}
-                      text={value}
-                      {...props}
-                      title={`${request.name}\n${props.title}`}
-                    />
+                    <Highlight search={filter} text={value} {...props} />
                   )}
                 />
               </div>
