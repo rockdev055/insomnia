@@ -62,9 +62,6 @@ export function init(
     settingDisableRenderRequestBody(enabled: boolean) {
       renderedRequest.settingDisableRenderRequestBody = enabled;
     },
-    settingFollowRedirects(enabled: string) {
-      renderedRequest.settingFollowRedirects = enabled;
-    },
     getHeader(name: string): string | null {
       const headers = misc.filterHeaders(renderedRequest.headers, name);
       if (headers.length) {
@@ -163,7 +160,6 @@ export function init(
     delete request.settingStoreCookies;
     delete request.settingEncodeUrl;
     delete request.settingDisableRenderRequestBody;
-    delete request.settingFollowRedirects;
     delete request.removeHeader;
     delete request.setHeader;
     delete request.addHeader;

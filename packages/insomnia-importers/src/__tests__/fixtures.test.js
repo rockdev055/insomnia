@@ -16,7 +16,7 @@ describe('Fixtures', () => {
       const prefix = input.replace(/-input\.[^.]+/, '');
       const output = `${prefix}-output.json`;
 
-      if (prefix.startsWith('skip')) {
+      if (!prefix.includes('simple')) {
         continue;
       }
 

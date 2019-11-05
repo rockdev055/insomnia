@@ -59,15 +59,6 @@ class SidebarRequestRow extends PureComponent {
     showModal(RequestSettingsModal, { request: this.props.request });
   }
 
-  _getMethodOverrideHeaderValue() {
-    let header = this.props.request.headers.find(
-      h => h.name.toLowerCase() === 'x-http-method-override',
-    );
-    if (!header || header.disabled) header = null;
-    else header = header.value;
-    return header;
-  }
-
   setDragDirection(dragDirection) {
     if (dragDirection !== this.state.dragDirection) {
       this.setState({ dragDirection });
@@ -125,10 +116,7 @@ class SidebarRequestRow extends PureComponent {
               onClick={this._handleRequestActivate}
               onContextMenu={this._handleShowRequestActions}>
               <div className="sidebar__clickable">
-                <MethodTag
-                  method={request.method}
-                  override={this._getMethodOverrideHeaderValue()}
-                />
+                <MethodTag method={request.method} />
                 <Editable
                   value={request.name}
                   className="inline-block"
