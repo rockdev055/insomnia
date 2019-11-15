@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import autobind from 'autobind-decorator';
-import moment from 'moment';
 import { Dropdown, DropdownButton, DropdownDivider, DropdownItem } from '../base/dropdown';
 import StatusTag from '../tags/status-tag';
 import URLTag from '../tags/url-tag';
@@ -83,41 +82,6 @@ class ResponseHistoryDropdown extends React.PureComponent<Props> {
     );
   }
 
-  renderPastResponses(responses: Array<Response>) {
-    const now = moment();
-    // Four arrays for four time groups
-    const categories = [[], [], [], []];
-    responses.forEach(r => {
-      const resTime = moment(r.modified);
-      if (now.diff(resTime, 'minutes') < 5) {
-        // Five minutes ago
-        categories[0].push(r);
-      } else if (now.diff(resTime, 'hours') < 2) {
-        // Two hours ago
-        categories[1].push(r);
-      } else if (now.isSame(resTime, 'day')) {
-        // Today
-        categories[2].push(r);
-      } else if (now.isSame(resTime, 'week')) {
-        // This week
-        categories[3].push(r);
-      }
-    });
-
-    return (
-      <React.Fragment>
-        <DropdownDivider>5 Minutes Ago</DropdownDivider>
-        {categories[0].map(this.renderDropdownItem)}
-        <DropdownDivider>2 Hours Ago</DropdownDivider>
-        {categories[1].map(this.renderDropdownItem)}
-        <DropdownDivider>Today</DropdownDivider>
-        {categories[2].map(this.renderDropdownItem)}
-        <DropdownDivider>This Week</DropdownDivider>
-        {categories[3].map(this.renderDropdownItem)}
-      </React.Fragment>
-    );
-  }
-
   render() {
     const {
       activeResponse, // eslint-disable-line no-unused-vars
@@ -153,7 +117,8 @@ class ResponseHistoryDropdown extends React.PureComponent<Props> {
             <i className="fa fa-trash-o" />
             Clear History
           </DropdownItem>
-          {this.renderPastResponses(responses)}
+          <DropdownDivider>Past Responses</DropdownDivider>
+          {responses.map(this.renderDropdownItem)}
         </Dropdown>
       </KeydownBinder>
     );
