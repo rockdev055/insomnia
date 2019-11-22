@@ -20,12 +20,7 @@ class ImportExport extends PureComponent {
   }
 
   render() {
-    const {
-      handleImportFile,
-      handleImportClipBoard,
-      handleExportAll,
-      handleShowExportRequestsModal,
-    } = this.props;
+    const { handleImportFile, handleExportAll, handleShowExportRequestsModal } = this.props;
 
     return (
       <div>
@@ -69,10 +64,6 @@ class ImportExport extends PureComponent {
               <i className="fa fa-link" />
               From URL
             </DropdownItem>
-            <DropdownItem onClick={handleImportClipBoard}>
-              <i className="fa fa-clipboard" />
-              From Clipboard
-            </DropdownItem>
           </Dropdown>
           &nbsp;&nbsp;
           <Link href="https://insomnia.rest/create-run-button/" className="btn btn--compact" button>
@@ -87,7 +78,6 @@ class ImportExport extends PureComponent {
 
 ImportExport.propTypes = {
   handleImportFile: PropTypes.func.isRequired,
-  handleImportClipBoard: PropTypes.func.isRequired,
   handleImportUri: PropTypes.func.isRequired,
   handleExportAll: PropTypes.func.isRequired,
   handleShowExportRequestsModal: PropTypes.func.isRequired,

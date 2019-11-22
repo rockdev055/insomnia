@@ -73,7 +73,6 @@ type Props = {
   handleSetSidebarFilter: Function,
   handleToggleMenuBar: Function,
   handleImportFileToWorkspace: Function,
-  handleImportClipBoardToWorkspace: Function,
   handleImportUriToWorkspace: Function,
   handleExportFile: Function,
   handleShowExportRequestsModal: Function,
@@ -267,10 +266,6 @@ class Wrapper extends React.PureComponent<Props, State> {
   // Other Helpers
   _handleImportFile(): void {
     this.props.handleImportFileToWorkspace(this.props.activeWorkspace._id);
-  }
-
-  _handleImportClipBoard(): void {
-    this.props.handleImportClipBoardToWorkspace(this.props.activeWorkspace._id);
   }
 
   _handleImportUri(uri: string): void {
@@ -643,7 +638,6 @@ class Wrapper extends React.PureComponent<Props, State> {
             handleShowExportRequestsModal={handleShowExportRequestsModal}
             handleExportAllToFile={handleExportFile}
             handleImportFile={this._handleImportFile}
-            handleImportClipBoard={this._handleImportClipBoard}
             handleImportUri={this._handleImportUri}
             handleToggleMenuBar={handleToggleMenuBar}
             settings={settings}
