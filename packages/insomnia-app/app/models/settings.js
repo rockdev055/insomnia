@@ -8,7 +8,6 @@ import * as hotkeys from '../common/hotkeys';
 type BaseSettings = {
   showPasswords: boolean,
   useBulkHeaderEditor: boolean,
-  useBulkParametersEditor: boolean,
   followRedirects: boolean,
   editorFontSize: number,
   editorIndentSize: number,
@@ -57,7 +56,6 @@ export function init(): BaseSettings {
   return {
     showPasswords: false,
     useBulkHeaderEditor: false,
-    useBulkParametersEditor: false,
     followRedirects: true,
     editorFontSize: 11,
     editorIndentSize: 2,

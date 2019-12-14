@@ -24,13 +24,13 @@ import BodyEditor from './editors/body/body-editor';
 import RequestHeadersEditor from './editors/request-headers-editor';
 import ErrorBoundary from './error-boundary';
 import Hotkey from './hotkey';
+import KeyValueEditor from './key-value-editor/editor';
 import MarkdownPreview from './markdown-preview';
 import { showModal } from './modals/index';
 import RequestSettingsModal from './modals/request-settings-modal';
 import RenderedQueryString from './rendered-query-string';
 import RequestUrlBar from './request-url-bar.js';
 import type { Settings } from '../../models/settings';
-import RequestParametersEditor from './editors/request-parameters-editor';
 
 type Props = {
   // Functions
@@ -52,7 +52,6 @@ type Props = {
   updateRequestMimeType: (r: Request, mimeType: string) => Promise<Request>,
   updateSettingsShowPasswords: Function,
   updateSettingsUseBulkHeaderEditor: Function,
-  updateSettingsUseBulkParametersEditor: Function,
   handleImport: Function,
   handleImportFile: Function,
 
@@ -105,17 +104,19 @@ class RequestPane extends React.PureComponent<Props> {
     updateSettingsUseBulkHeaderEditor(!settings.useBulkHeaderEditor);
   }
 
-  _handleUpdateSettingsUseBulkParametersEditor() {
-    const { settings, updateSettingsUseBulkParametersEditor } = this.props;
-    updateSettingsUseBulkParametersEditor(!settings.useBulkParametersEditor);
-  }
-
   _handleImportFile() {
     this.props.handleImportFile();
   }
 
   _handleCreateRequest() {
     this.props.handleCreateRequest();
+  }
+
+  _handleUpdateRequestParameters(parameters: Array<RequestParameter>) {
+    const { request, updateRequestParameters } = this.props;
+    if (request) {
+      updateRequestParameters(request, parameters);
+    }
   }
 
   _handleImportQueryFromUrl() {
@@ -167,7 +168,6 @@ class RequestPane extends React.PureComponent<Props> {
       updateRequestMimeType,
       updateSettingsShowPasswords,
       updateRequestMethod,
-      updateRequestParameters,
       updateRequestUrl,
       headerEditorKey,
       downloadPath,
@@ -369,18 +369,18 @@ class RequestPane extends React.PureComponent<Props> {
               <ErrorBoundary
                 key={uniqueKey}
                 errorClassName="tall wide vertically-align font-error pad text-center">
-                <RequestParametersEditor
-                  key={headerEditorKey}
+                <KeyValueEditor
+                  sortable
+                  allowMultiline
+                  namePlaceholder="name"
+                  valuePlaceholder="value"
+                  descriptionPlaceholder="description"
+                  pairs={request.parameters}
                   handleRender={handleRender}
                   handleGetRenderContext={handleGetRenderContext}
                   nunjucksPowerUserMode={settings.nunjucksPowerUserMode}
                   isVariableUncovered={isVariableUncovered}
-                  editorFontSize={settings.editorFontSize}
-                  editorIndentSize={settings.editorIndentSize}
-                  editorLineWrapping={settings.editorLineWrapping}
-                  onChange={updateRequestParameters}
-                  request={request}
-                  bulk={settings.useBulkParametersEditor}
+                  onChange={this._handleUpdateRequestParameters}
                 />
               </ErrorBoundary>
             </div>
@@ -390,11 +390,6 @@ class RequestPane extends React.PureComponent<Props> {
                 title={urlHasQueryParameters ? 'Import querystring' : 'No query params to import'}
                 onClick={this._handleImportQueryFromUrl}>
                 Import from URL
-              </button>
-              <button
-                className="margin-top-sm btn btn--clicky space-left"
-                onClick={this._handleUpdateSettingsUseBulkParametersEditor}>
-                {settings.useBulkParametersEditor ? 'Regular Edit' : 'Bulk Edit'}
               </button>
             </div>
           </TabPanel>
