@@ -45,7 +45,6 @@ type Props = {
   previewMode: string,
   filter: string,
   filterHistory: Array<string>,
-  disableHtmlPreviewJs: boolean,
   editorFontSize: number,
   editorIndentSize: number,
   editorKeyMap: string,
@@ -177,27 +176,26 @@ class ResponsePane extends React.PureComponent<Props> {
 
   render() {
     const {
-      disableHtmlPreviewJs,
+      request,
+      responses,
+      requestVersions,
+      response,
+      previewMode,
+      handleShowRequestSettings,
+      handleSetPreviewMode,
+      handleSetActiveResponse,
+      handleDeleteResponses,
+      handleDeleteResponse,
+      handleSetFilter,
+      loadStartTime,
+      editorLineWrapping,
       editorFontSize,
       editorIndentSize,
       editorKeyMap,
-      editorLineWrapping,
       filter,
       filterHistory,
-      handleDeleteResponse,
-      handleDeleteResponses,
-      handleSetActiveResponse,
-      handleSetFilter,
-      handleSetPreviewMode,
-      handleShowRequestSettings,
-      hotKeyRegistry,
-      loadStartTime,
-      previewMode,
-      request,
-      requestVersions,
-      response,
-      responses,
       showCookiesModal,
+      hotKeyRegistry,
     } = this.props;
 
     const paneClasses = 'response-pane theme--pane pane';
@@ -345,7 +343,6 @@ class ResponsePane extends React.PureComponent<Props> {
               filterHistory={filterHistory}
               updateFilter={response.error ? null : handleSetFilter}
               download={this._handleDownloadResponseBody}
-              disableHtmlPreviewJs={disableHtmlPreviewJs}
               getBody={this._handleGetResponseBody}
               error={response.error}
               editorLineWrapping={editorLineWrapping}

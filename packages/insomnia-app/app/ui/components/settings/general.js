@@ -301,17 +301,10 @@ class General extends React.PureComponent<Props, State> {
 
         <hr className="pad-top" />
 
-        <h2>Request / Response</h2>
+        <h2>Network</h2>
 
-        <div className="row-fill row-fill--top">
-          <div>
-            {this.renderBooleanSetting('Validate certificates', 'validateSSL', '')}
-            {this.renderBooleanSetting('Follow redirects', 'followRedirects', '')}
-          </div>
-          <div>
-            {this.renderBooleanSetting('Disable JS in HTML preview', 'disableHtmlPreviewJs', '')}
-          </div>
-        </div>
+        {this.renderBooleanSetting('Validate certificates', 'validateSSL', '')}
+        {this.renderBooleanSetting('Follow redirects', 'followRedirects', '')}
 
         <div className="form-row pad-top-sm">
           {this.renderNumberSetting('Maximum Redirects', 'maxRedirects', '-1 for infinite', {
